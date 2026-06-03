@@ -1,11 +1,17 @@
+var DASHBOARD_TAB_NAME = "계산기";
+var DATA_CHECKBOX_RANGE_START = "B10";
+var DATA_CHECKBOX_RANGE_END = "B12";
+
 // 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
 function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = spreadsheet.getSheetByName("계산기");
-  
+  var sheet = spreadsheet.getSheetByName(DASHBOARD_TAB_NAME);
+
   // 만약 계산기 탭이 존재한다면, B10부터 B12까지의 체크박스를 전부 false(꺼짐)로 만듭니다.
   if (sheet) {
-    sheet.getRange("B10:B12").setValue(false);
+    sheet
+      .getRange(DATA_CHECKBOX_RANGE_START + ":" + DATA_CHECKBOX_RANGE_END)
+      .setValue(false);
   }
 }
 
