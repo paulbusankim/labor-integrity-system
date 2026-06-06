@@ -18,6 +18,10 @@ function onEdit(e) {
 
 function resetAllCheckbox(sheet) {
   sheet
-    .getRange(DATA_CHECKBOX_RANGE_START + ":" + DATA_CHECKBOX_RANGE_END)
+    .getRange(joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END))
     .setValue(false);
+}
+
+function joinCellRange(start, end) {
+  return start + ":" + end;
 }
