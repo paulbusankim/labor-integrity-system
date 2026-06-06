@@ -8,8 +8,8 @@ function onOpen() {
   var sheet = spreadsheet.getSheetByName(DASHBOARD_TAB_NAME);
 
   if (!sheet) return;
-  
-  resetAllCheckbox(
+
+  resetCheckbox(
     sheet,
     joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
   );
@@ -20,7 +20,7 @@ function onEdit(e) {
   app_Labor_Master_DB.saveLogFromUser(e);
 }
 
-function resetAllCheckbox(sheet, range) {
+function resetCheckbox(sheet, range) {
   sheet.getRange(range).setValue(false);
 }
 
