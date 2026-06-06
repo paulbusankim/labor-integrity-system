@@ -1,6 +1,7 @@
 var DASHBOARD_TAB_NAME = "계산기";
 var DATA_CHECKBOX_RANGE_START = "B10";
 var DATA_CHECKBOX_RANGE_END = "B12";
+var SUBMIT_CELL = "B14";
 
 // 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
 function onOpen() {
@@ -13,6 +14,8 @@ function onOpen() {
     sheet,
     joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
   );
+
+  resetCheckbox(sheet, SUBMIT_CELL);
 }
 
 function onEdit(e) {
