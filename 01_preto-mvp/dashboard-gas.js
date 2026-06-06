@@ -25,5 +25,6 @@ function resetCheckbox(sheet, range) {
 }
 
 function joinCellRange(start, end) {
+  if (!end) return start;
   return start + ":" + end;
 }
