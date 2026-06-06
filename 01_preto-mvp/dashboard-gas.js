@@ -7,10 +7,8 @@ function onOpen() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = spreadsheet.getSheetByName(DASHBOARD_TAB_NAME);
 
-  // 만약 계산기 탭이 존재한다면, B10부터 B12까지의 체크박스를 전부 false(꺼짐)로 만듭니다.
-  if (sheet) {
-    resetAllCheckbox(sheet);
-  }
+  if (!sheet) return;
+  resetAllCheckbox(sheet);
 }
 
 function onEdit(e) {
