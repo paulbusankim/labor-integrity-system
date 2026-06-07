@@ -18,8 +18,14 @@ function onOpen() {
 }
 
 function onEdit(e) {
-  // 등록한 라이브러리 이름(app_Labor_Master_DB)을 통해 마스터 엔진의 함수를 호출하면서 이벤트 매개변수(e)를 안전하게 전달
-  app_Labor_Master_DB.saveLogFromUser(e);
+  var range = e.range;
+
+  if (range.getA1Notation() === SUBMIT_CELL && e.value === "FALSE") return;
+
+  if (range.getA1Notation() === SUBMIT_CELL && e.value === "TRUE") {
+    app_Labor_Master_DB.saveLogFromUser(e);
+    console.log("DB에 저장되었습니다.");
+  }
 }
 
 function getSheet(tabName) {
