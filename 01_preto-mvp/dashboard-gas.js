@@ -24,7 +24,7 @@ function onEdit(e) {
 
   if (range.getA1Notation() === SUBMIT_CELL && e.value === "TRUE") {
     app_Labor_Master_DB.saveLogFromUser(e);
-    console.log("DB에 저장되었습니다.");
+    toast("데이터를 저장했습니다.", "저장 완료");
   }
 }
 
@@ -42,4 +42,9 @@ function resetCheckbox(sheet) {
 function joinCellRange(start, end) {
   if (!end) return start;
   return start + ":" + end;
+}
+
+function toast(msg, title) {
+  var toastTitle = title ? title : "알림";
+  SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
 }
