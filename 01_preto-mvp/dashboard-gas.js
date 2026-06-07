@@ -9,12 +9,12 @@ function onOpen() {
 
   if (!sheet) return;
 
-  resetCheckbox(
-    sheet,
-    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-  );
+  var reset = resetCheckbox(sheet);
 
-  resetCheckbox(sheet, SUBMIT_CELL);
+  reset([
+    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
+    SUBMIT_CELL,
+  ]);
 }
 
 function onEdit(e) {
@@ -27,8 +27,10 @@ function getSheet(tabName) {
   return spreadsheet.getSheetByName(tabName);
 }
 
-function resetCheckbox(sheet, range) {
-  sheet.getRange(range).setValue(false);
+function resetCheckbox(sheet) {
+  return function (ranges) {
+    sheet.getRangeList(ranges).setValue(false);
+  };
 }
 
 function joinCellRange(start, end) {
