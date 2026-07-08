@@ -22,15 +22,19 @@ function onEdit(e) {
   var range = e.range;
   var cellAddress = range.getA1Notation();
   var cellValue = e.value;
+  var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
+    sheet,
+    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
+  );
 
   if (cellAddress === SUBMIT_CELL && cellValue === "FALSE") return;
 
-  if (verifyUserCheckboxHasTrue(sheet) === false) return;
+  if (hasTrueUserCheckbox === false) return;
 
   if (
     cellAddress === SUBMIT_CELL &&
     cellValue === "TRUE" &&
-    verifyUserCheckboxHasTrue(sheet) === true
+    hasTrueUserCheckbox === true
   ) {
     var userSelectedRange = sheet.getRange(
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
@@ -57,10 +61,8 @@ function onEdit(e) {
   }
 }
 
-function verifyUserCheckboxHasTrue(sheet) {
-  var checkboxRange = sheet.getRange(
-    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-  );
+function verifyUserCheckboxHasTrue(sheet, cellRange) {
+  var checkboxRange = sheet.getRange(jcellRange);
   var values = checkboxRange.getValues();
   return values.flat().some((val) => val === true);
 }
