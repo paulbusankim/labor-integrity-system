@@ -5,7 +5,7 @@ var SUBMIT_CELL = "B14";
 
 // 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
 function onOpen(e) {
-  var sheet = getSheetFromEvent(e)
+  var sheet = getSheetFromEvent(e);
 
   if (!sheet) return;
 
@@ -36,7 +36,7 @@ function onEdit(e) {
       startRow,
       startColumn,
     ]);
-    
+
     app_Labor_Master_DB.saveLogFromUser(e);
     toast("데이터를 저장했습니다.", "저장 완료");
   }
