@@ -54,8 +54,6 @@ function onEdit(e) {
       data: mappedData,
     };
 
-    console.log("payload.datat: ", payload.data);
-
     app_Labor_Master_DB.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
   }
