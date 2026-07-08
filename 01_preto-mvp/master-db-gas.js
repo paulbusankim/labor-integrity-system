@@ -1,15 +1,17 @@
-function saveLogFromUser(e) {
+function saveLogFromUser(payload) {
+  var event = payload.event
+
   console.log("=== [시작] saveLogFromUser 함수가 실행되었습니다 ===");
 
-  if (!e) {
-    console.log("❌ [중단] 이벤트 객체(e)가 누락되었습니다. 수동으로 실행 버튼을 누르셨거나 트리거 신호가 비어있습니다.");
+  if (!event) {
+    console.log("❌ [중단] 이벤트 객체(event)가 누락되었습니다. 수동으로 실행 버튼을 누르셨거나 트리거 신호가 비어있습니다.");
     return;
   }
   
-  var range = e.range;
+  var range = event.range;
   var sheet = range.getSheet();
   var sheetName = sheet.getName();
-  var value = e.value;
+  var value = event.value;
 
   var cellAddress = range.getA1Notation();
 
