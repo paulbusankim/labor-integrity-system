@@ -19,13 +19,19 @@ function onOpen(e) {
 
 function onEdit(e) {
   var sheet = getSheetFromEvent(e);
-  var submitCellRange = e.range;
-  var submitCellValue = e.value;
-  var submitCellAddress = submitCellRange.getA1Notation();
+  var range = e.range;
+  var cellAddress = range.getA1Notation();
+  var cellValue = e.value;
 
-  if (submitCellAddress === SUBMIT_CELL && submitCellValue === "FALSE") return;
+  if (cellAddress === SUBMIT_CELL && cellValue === "FALSE") return;
 
-  if (submitCellAddress === SUBMIT_CELL && submitCellValue === "TRUE") {
+  if (verifyUserCheckboxHasTrue(sheet) === false) return;
+
+  if (
+    cellAddress === SUBMIT_CELL &&
+    cellValue === "TRUE" &&
+    verifyUserCheckboxHasTrue(sheet) === true
+  ) {
     var userSelectedRange = sheet.getRange(
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
@@ -49,6 +55,14 @@ function onEdit(e) {
     app_Labor_Master_DB.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
   }
+}
+
+function verifyUserCheckboxHasTrue(sheet) {
+  var checkboxRange = sheet.getRange(
+    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
+  );
+  var values = checkboxRange.getValues();
+  return values.flat().some((val) => val === true);
 }
 
 function getSheetFromEvent(e) {
