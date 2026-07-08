@@ -4,8 +4,8 @@ var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
 
 // 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
-function onOpen() {
-  var sheet = getSheet(DASHBOARD_TAB_NAME);
+function onOpen(e) {
+  var sheet = getSheetFromEvent(e)
 
   if (!sheet) return;
 
@@ -28,9 +28,9 @@ function onEdit(e) {
   }
 }
 
-function getSheet(tabName) {
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  return spreadsheet.getSheetByName(tabName);
+function getSheetFromEvent(e) {
+  if (!e || !e.range) return null;
+  return e.range.getSheet();
 }
 
 function resetCheckbox(sheet) {
