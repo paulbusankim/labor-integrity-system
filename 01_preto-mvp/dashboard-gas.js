@@ -18,14 +18,14 @@ function onOpen(e) {
 }
 
 function onEdit(e) {
+  var sheet = getSheetFromEvent(e);
   var submitCellRange = e.range;
+  var submitCellValue = e.value;
   var submitCellAddress = submitCellRange.getA1Notation();
 
-  if (submitCellAddress === SUBMIT_CELL && e.value === "FALSE") return;
+  if (submitCellAddress === SUBMIT_CELL && submitCellValue === "FALSE") return;
 
-  if (submitCellAddress === SUBMIT_CELL && e.value === "TRUE") {
-    var sheet = getSheetFromEvent(e);
-    
+  if (submitCellAddress === SUBMIT_CELL && submitCellValue === "TRUE") {
     var userSelectedRange = sheet.getRange(
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
@@ -41,8 +41,10 @@ function onEdit(e) {
 
     var payload = {
       event: e,
-      data: mappedData
-    }
+      data: mappedData,
+    };
+
+    console.log("payload.datat: ", payload.data);
 
     app_Labor_Master_DB.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
