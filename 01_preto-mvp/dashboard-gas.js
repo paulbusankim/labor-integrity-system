@@ -39,6 +39,24 @@ function resetCheckbox(sheet) {
   };
 }
 
+function getMappedData(sheet, values, [startRow, startColumn]) {
+  try {
+    return values.map(mapData);
+  } catch (error) {
+    console.log("error on getMappedData", error);
+  }
+
+  function mapData(row, index) {
+    var cellAddress = sheet
+      .getRange(startRow + index, startColumn)
+      .getA1Notation();
+    return {
+      cell: cellAddress,
+      values: row[0],
+    };
+  }
+}
+
 function joinCellRange(start, end) {
   if (!end) return start;
   return start + ":" + end;
