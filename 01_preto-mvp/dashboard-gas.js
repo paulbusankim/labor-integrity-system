@@ -18,11 +18,12 @@ function onOpen(e) {
 }
 
 function onEdit(e) {
-  var range = e.range;
+  var submitCellRange = e.range;
+  var submitCellAddress = submitCellRange.getA1Notation();
 
-  if (range.getA1Notation() === SUBMIT_CELL && e.value === "FALSE") return;
+  if (submitCellAddress === SUBMIT_CELL && e.value === "FALSE") return;
 
-  if (range.getA1Notation() === SUBMIT_CELL && e.value === "TRUE") {
+  if (submitCellAddress === SUBMIT_CELL && e.value === "TRUE") {
     app_Labor_Master_DB.saveLogFromUser(e);
     toast("데이터를 저장했습니다.", "저장 완료");
   }
