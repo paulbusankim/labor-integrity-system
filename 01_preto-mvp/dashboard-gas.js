@@ -25,9 +25,11 @@ function onEdit(e) {
 
   if (submitCellAddress === SUBMIT_CELL && e.value === "TRUE") {
     var sheet = getSheetFromEvent(e);
+    
     var userSelectedRange = sheet.getRange(
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
+
     var startRow = userSelectedRange.getRow();
     var startColumn = userSelectedRange.getColumn();
 
@@ -37,7 +39,12 @@ function onEdit(e) {
       startColumn,
     ]);
 
-    app_Labor_Master_DB.saveLogFromUser(e);
+    var payload = {
+      event: e,
+      data: mappedData
+    }
+
+    app_Labor_Master_DB.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
   }
 }
