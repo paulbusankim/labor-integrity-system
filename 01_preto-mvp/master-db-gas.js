@@ -71,7 +71,10 @@ function saveLogFromUser(payload) {
         );
         var logSheet = masterFile.getSheetByName("Log");
         var timestamp = new Date();
-        logSheet.appendRow([timestamp, selectedOptions.join(", ")]);
+
+        selectedOptions.forEach((option) => {
+          logSheet.appendRow([timestamp, option]);
+        });
         console.log(
           "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
         );
