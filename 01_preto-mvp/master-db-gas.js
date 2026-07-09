@@ -1,5 +1,6 @@
 var MASTER_DB_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590";
+var MASTER_FILE = null;
 var LOG_SHEET_NAME = "Log";
 
 function saveLogFromUser(payload) {
@@ -7,8 +8,11 @@ function saveLogFromUser(payload) {
 
   if (!event) return;
 
-  var mappingConfig = getMappingConfig();
+  MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+  if (!MASTER_FILE) return;
   
+  var mappingConfig = getMappingConfig(MASTER_FILE);
+
   var selectedOptions = payload.data
     .filter((item) => item.values === true)
     .map((item) => {
@@ -22,8 +26,7 @@ function saveLogFromUser(payload) {
 
   if (hasUserSubmitTrue(event)) {
     try {
-      var masterFile = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-      var logSheet = masterFile.getSheetByName(LOG_SHEET_NAME);
+      var logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
       var timestamp = new Date();
 
       selectedOptions.forEach((option) => {
@@ -43,9 +46,8 @@ function hasUserSubmitTrue(event) {
   return value === "TRUE" || value === true ? true : false;
 }
 
-function getMappingConfig() {
-  var sheet =
-    SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL).getSheetByName("Config");
+function getMappingConfig(masterFile) {
+  var sheet = masterFile.getSheetByName("Config");
   var data = sheet.getDataRange().getValues();
   return data.reduce(function (acc, row) {
     var cellAddress = row[0];
