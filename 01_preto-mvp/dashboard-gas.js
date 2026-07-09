@@ -60,7 +60,7 @@ function onEdit(e) {
 }
 
 function verifyUserCheckboxHasTrue(sheet, cellRange) {
-  var checkboxRange = sheet.getRange(jcellRange);
+  var checkboxRange = sheet.getRange(cellRange);
   var values = checkboxRange.getValues();
   return values.flat().some((val) => val === true);
 }
