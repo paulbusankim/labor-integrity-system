@@ -43,9 +43,6 @@ function handleUserSubmit(e) {
   try {
     var isSubmitConfirmed = isSubmitRequested(e);
     var sheet = e.range.getSheet();
-    var range = e.range;
-    var cellAddress = range.getA1Notation();
-    var cellValue = e.value;
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
       sheet,
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
