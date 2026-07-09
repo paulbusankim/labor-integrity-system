@@ -7,7 +7,7 @@ var SUBMIT_CELL = "B14";
 function onOpen(e) {
   if (!e || !e.range) return;
 
-  var sheet = getSheetFromEvent(e);
+  var sheet = e.range.getSheet();
   if (!sheet) return;
 
   var reset = resetCheckbox(sheet);
@@ -42,8 +42,7 @@ function handleUserSubmit(e) {
 
   try {
     var isSubmitConfirmed = isSubmitRequested(e);
-
-    var sheet = getSheetFromEvent(e);
+    var sheet = e.range.getSheet();
     var range = e.range;
     var cellAddress = range.getA1Notation();
     var cellValue = e.value;
@@ -93,11 +92,6 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
   var checkboxRange = sheet.getRange(cellRange);
   var values = checkboxRange.getValues();
   return values.flat().some((val) => val === true);
-}
-
-function getSheetFromEvent(e) {
-  if (!e || !e.range) return null;
-  return e.range.getSheet();
 }
 
 function resetCheckbox(sheet) {
