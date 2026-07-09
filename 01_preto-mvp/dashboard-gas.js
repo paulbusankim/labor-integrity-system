@@ -5,8 +5,9 @@ var SUBMIT_CELL = "B14";
 
 // 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
 function onOpen(e) {
-  var sheet = getSheetFromEvent(e);
+  if (!e || !e.range) return;
 
+  var sheet = getSheetFromEvent(e);
   if (!sheet) return;
 
   var reset = resetCheckbox(sheet);
