@@ -7,7 +7,6 @@ function saveLogFromUser(payload) {
 
   if (!event) return;
 
-  var range = event.range;
   var mappingConfig = getMappingConfig();
   
   var selectedOptions = payload.data
