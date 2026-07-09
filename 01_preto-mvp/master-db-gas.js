@@ -36,12 +36,6 @@ function saveLogFromUser(payload) {
     } catch (error) {
       console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
     }
-  } else {
-    console.log(
-      "⚠️ [종료] 수정한 셀 위치(" +
-        cellAddress +
-        ")가 B10, B11, B12가 아니므로 중단합니다.",
-    );
   }
 }
 
