@@ -22,16 +22,6 @@ function saveLogFromUser(payload) {
     .filter((item) => item.values === true)
     .map((item) => USER_CHECKBOX_OPTION_MPA[item.cell]);
 
-  console.log(
-    "📋 [현재 입력 정보] 수정한 시트명: " +
-      cellAddress +
-      " | 입력된 값: " +
-      value +
-      " (데이터타입: " +
-      typeof value +
-      ")",
-  );
-
   if (value === "TRUE" || value === true) {
     if (selectedOptions.length > 0) {
       try {
