@@ -7,8 +7,6 @@ var USER_CHECKBOX_OPTION_MPA = {
 function saveLogFromUser(payload) {
   var event = payload.event;
 
-  console.log("=== [시작] saveLogFromUser 함수가 실행되었습니다 ===");
-
   if (!event) {
     console.log(
       "❌ [중단] 이벤트 객체(event)가 누락되었습니다. 수동으로 실행 버튼을 누르셨거나 트리거 신호가 비어있습니다.",
@@ -47,10 +45,6 @@ function saveLogFromUser(payload) {
   }
 
   if (value === "TRUE" || value === true) {
-    console.log(
-      "✅ [확인] 체크박스가 켜진 것을 감지했습니다 (TRUE). 옵션 명칭 확인을 시작합니다.",
-    );
-
     var optionName = "";
     if (range.getA1Notation() === "B10")
       optionName = "주말/야간 수당 옵션 클릭";
@@ -58,11 +52,6 @@ function saveLogFromUser(payload) {
       optionName = "30분 단위 절사 비교 옵션 클릭";
     else if (range.getA1Notation() === "B12")
       optionName = "고용노동부 리포트 옵션 클릭";
-
-    console.log(
-      "🔍 [분석 결과] 매칭된 옵션 명칭: " +
-        (optionName === "" ? "없음(B10, B11, B12 외의 셀)" : optionName),
-    );
 
     if (selectedOptions.length > 0) {
       try {
@@ -77,11 +66,6 @@ function saveLogFromUser(payload) {
         });
         console.log(
           "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
-        );
-
-        // range.setValue(false); // ⬅️ 앞에 슬래시 두 개(//)를 붙여서 작동하지 못하게 막아버립니다.
-        console.log(
-          "🔄 [패스] 즉시 해제하지 않고 새로고침할 때 초기화되도록 유도합니다.",
         );
       } catch (error) {
         console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
