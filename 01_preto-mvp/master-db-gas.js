@@ -1,3 +1,6 @@
+var MASTER_DB_SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590";
+var LOG_SHEET_NAME = "Log";
 var USER_CHECKBOX_OPTION_MPA = {
   B10: "주말/야간 수당 옵션 클릭",
   B11: "30분 단위 절사 비교 옵션 클릭",
@@ -25,10 +28,8 @@ function saveLogFromUser(payload) {
   if (value === "TRUE" || value === true) {
     if (selectedOptions.length > 0) {
       try {
-        var masterFile = SpreadsheetApp.openByUrl(
-          "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590",
-        );
-        var logSheet = masterFile.getSheetByName("Log");
+        var masterFile = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+        var logSheet = masterFile.getSheetByName(LOG_SHEET_NAME);
         var timestamp = new Date();
 
         selectedOptions.forEach((option) => {
