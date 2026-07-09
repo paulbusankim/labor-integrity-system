@@ -40,6 +40,8 @@ function handleUserSubmit(e) {
   }
 
   try {
+    var isSubmitConfirmed = isSubmitRequested(e);
+
     var sheet = getSheetFromEvent(e);
     var range = e.range;
     var cellAddress = range.getA1Notation();
@@ -49,41 +51,41 @@ function handleUserSubmit(e) {
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
 
-    if (cellAddress === SUBMIT_CELL && cellValue === "FALSE") return;
-
+    if (isSubmitConfirmed === false) return;
     if (hasTrueUserCheckbox === false) return;
 
-    if (
-      cellAddress === SUBMIT_CELL &&
-      cellValue === "TRUE" &&
-      hasTrueUserCheckbox === true
-    ) {
-      var userSelectedRange = sheet.getRange(
-        joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-      );
+    var userSelectedRange = sheet.getRange(
+      joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
+    );
 
-      var startRow = userSelectedRange.getRow();
-      var startColumn = userSelectedRange.getColumn();
+    var startRow = userSelectedRange.getRow();
+    var startColumn = userSelectedRange.getColumn();
 
-      var userSelectedValues = userSelectedRange.getValues();
-      var mappedData = getMappedData(sheet, userSelectedValues, [
-        startRow,
-        startColumn,
-      ]);
+    var userSelectedValues = userSelectedRange.getValues();
+    var mappedData = getMappedData(sheet, userSelectedValues, [
+      startRow,
+      startColumn,
+    ]);
 
-      var payload = {
-        event: e,
-        data: mappedData,
-      };
+    var payload = {
+      event: e,
+      data: mappedData,
+    };
 
-      app_Labor_Master_DB.saveLogFromUser(payload);
-      toast("데이터를 저장했습니다.", "저장 완료");
-    }
+    app_Labor_Master_DB.saveLogFromUser(payload);
+    toast("데이터를 저장했습니다.", "저장 완료");
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
   } finally {
     lock.releaseLock();
   }
+}
+
+function isSubmitRequested(e) {
+  var range = e.range;
+  var cellAddress = range.getA1Notation();
+  var cellValue = e.value;
+  return cellAddress === SUBMIT_CELL && cellValue === "TRUE" ? true : false;
 }
 
 function verifyUserCheckboxHasTrue(sheet, cellRange) {
