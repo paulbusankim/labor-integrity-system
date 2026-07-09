@@ -14,13 +14,12 @@ function saveLogFromUser(payload) {
 
   var range = event.range;
   var sheet = range.getSheet();
-  var value = event.value;
   var cellAddress = range.getA1Notation();
   var selectedOptions = payload.data
     .filter((item) => item.values === true)
     .map((item) => USER_CHECKBOX_OPTION_MPA[item.cell]);
 
-  if (value === "TRUE" || value === true) {
+  if (hasUserSubmitTrue(event)) {
     if (selectedOptions.length > 0) {
       try {
         var masterFile = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
@@ -44,4 +43,9 @@ function saveLogFromUser(payload) {
       );
     }
   }
+}
+
+function hasUserSubmitTrue(event) {
+  var value = event.value;
+  return value === "TRUE" || value === true ? true : false;
 }
