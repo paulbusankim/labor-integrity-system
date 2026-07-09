@@ -17,7 +17,21 @@ function onOpen(e) {
   ]);
 }
 
-function onEdit(e) {
+/**
+ * [트리거 설정 필수 안내]
+ * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
+ * * 1. 설정 방법: 앱스 스크립트 '트리거' 메뉴 -> '트리거 추가'
+ * 2. 실행할 함수: handleUserSubmit
+ * 3. 이벤트 소스: 스프레드시트에서
+ * 4. 이벤트 유형: 수정 시 (반드시 선택!)
+ * * [주의 사항]
+ * - '변경 시(onChange)' 이벤트 유형은 셀의 값 외에도 필터/서식 변경 등 구조적 변화를 모두 감지합니다.
+ * - '변경 시'로 설정할 경우, 이벤트 객체(e)가 없는 호출이 빈번하여 시스템 노이즈 및 오류가 발생합니다.
+ * - 반드시 '수정 시(onEdit)'를 선택해야 정상적으로 작동합니다.
+ */
+function handleUserSubmit(e) {
+  if (!e || !e.range) return;
+
   var sheet = getSheetFromEvent(e);
   var range = e.range;
   var cellAddress = range.getA1Notation();
