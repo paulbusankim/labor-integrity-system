@@ -10,12 +10,7 @@ var USER_CHECKBOX_OPTION_MPA = {
 function saveLogFromUser(payload) {
   var event = payload.event;
 
-  if (!event) {
-    console.log(
-      "❌ [중단] 이벤트 객체(event)가 누락되었습니다. 수동으로 실행 버튼을 누르셨거나 트리거 신호가 비어있습니다.",
-    );
-    return;
-  }
+  if (!event) return;
 
   var range = event.range;
   var sheet = range.getSheet();
@@ -48,9 +43,5 @@ function saveLogFromUser(payload) {
           ")가 B10, B11, B12가 아니므로 중단합니다.",
       );
     }
-  } else {
-    console.log(
-      "⚠️ [종료] 입력된 값이 TRUE가 아닙니다. 체크박스가 해제되었거나 다른 값이 입력되어 종료합니다.",
-    );
   }
 }
