@@ -45,14 +45,6 @@ function saveLogFromUser(payload) {
   }
 
   if (value === "TRUE" || value === true) {
-    var optionName = "";
-    if (range.getA1Notation() === "B10")
-      optionName = "주말/야간 수당 옵션 클릭";
-    else if (range.getA1Notation() === "B11")
-      optionName = "30분 단위 절사 비교 옵션 클릭";
-    else if (range.getA1Notation() === "B12")
-      optionName = "고용노동부 리포트 옵션 클릭";
-
     if (selectedOptions.length > 0) {
       try {
         var masterFile = SpreadsheetApp.openByUrl(
