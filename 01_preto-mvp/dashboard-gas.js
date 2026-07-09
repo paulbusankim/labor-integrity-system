@@ -32,44 +32,57 @@ function onOpen(e) {
 function handleUserSubmit(e) {
   if (!e || !e.range) return;
 
-  var sheet = getSheetFromEvent(e);
-  var range = e.range;
-  var cellAddress = range.getA1Notation();
-  var cellValue = e.value;
-  var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
-    sheet,
-    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-  );
+  var lock = LockService.getUserLock();
+  try {
+    lock.waitLock(10000);
+  } catch (error) {
+    console.warn("이전 작업이 진행 중입니다. 잠금 획득 실패.");
+  }
 
-  if (cellAddress === SUBMIT_CELL && cellValue === "FALSE") return;
-
-  if (hasTrueUserCheckbox === false) return;
-
-  if (
-    cellAddress === SUBMIT_CELL &&
-    cellValue === "TRUE" &&
-    hasTrueUserCheckbox === true
-  ) {
-    var userSelectedRange = sheet.getRange(
+  try {
+    var sheet = getSheetFromEvent(e);
+    var range = e.range;
+    var cellAddress = range.getA1Notation();
+    var cellValue = e.value;
+    var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
+      sheet,
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
 
-    var startRow = userSelectedRange.getRow();
-    var startColumn = userSelectedRange.getColumn();
+    if (cellAddress === SUBMIT_CELL && cellValue === "FALSE") return;
 
-    var userSelectedValues = userSelectedRange.getValues();
-    var mappedData = getMappedData(sheet, userSelectedValues, [
-      startRow,
-      startColumn,
-    ]);
+    if (hasTrueUserCheckbox === false) return;
 
-    var payload = {
-      event: e,
-      data: mappedData,
-    };
+    if (
+      cellAddress === SUBMIT_CELL &&
+      cellValue === "TRUE" &&
+      hasTrueUserCheckbox === true
+    ) {
+      var userSelectedRange = sheet.getRange(
+        joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
+      );
 
-    app_Labor_Master_DB.saveLogFromUser(payload);
-    toast("데이터를 저장했습니다.", "저장 완료");
+      var startRow = userSelectedRange.getRow();
+      var startColumn = userSelectedRange.getColumn();
+
+      var userSelectedValues = userSelectedRange.getValues();
+      var mappedData = getMappedData(sheet, userSelectedValues, [
+        startRow,
+        startColumn,
+      ]);
+
+      var payload = {
+        event: e,
+        data: mappedData,
+      };
+
+      app_Labor_Master_DB.saveLogFromUser(payload);
+      toast("데이터를 저장했습니다.", "저장 완료");
+    }
+  } catch (error) {
+    console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
+  } finally {
+    lock.releaseLock();
   }
 }
 
