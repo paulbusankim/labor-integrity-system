@@ -19,29 +19,29 @@ function saveLogFromUser(payload) {
     .filter((item) => item.values === true)
     .map((item) => USER_CHECKBOX_OPTION_MPA[item.cell]);
 
-  if (hasUserSubmitTrue(event)) {
-    if (selectedOptions.length > 0) {
-      try {
-        var masterFile = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-        var logSheet = masterFile.getSheetByName(LOG_SHEET_NAME);
-        var timestamp = new Date();
+  if (selectedOptions.length === 0) return;
 
-        selectedOptions.forEach((option) => {
-          logSheet.appendRow([timestamp, option]);
-        });
-        console.log(
-          "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
-        );
-      } catch (error) {
-        console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
-      }
-    } else {
+  if (hasUserSubmitTrue(event)) {
+    try {
+      var masterFile = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+      var logSheet = masterFile.getSheetByName(LOG_SHEET_NAME);
+      var timestamp = new Date();
+
+      selectedOptions.forEach((option) => {
+        logSheet.appendRow([timestamp, option]);
+      });
       console.log(
-        "⚠️ [종료] 수정한 셀 위치(" +
-          cellAddress +
-          ")가 B10, B11, B12가 아니므로 중단합니다.",
+        "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
       );
+    } catch (error) {
+      console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
     }
+  } else {
+    console.log(
+      "⚠️ [종료] 수정한 셀 위치(" +
+        cellAddress +
+        ")가 B10, B11, B12가 아니므로 중단합니다.",
+    );
   }
 }
 
