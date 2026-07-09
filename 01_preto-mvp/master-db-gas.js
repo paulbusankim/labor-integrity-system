@@ -16,7 +16,6 @@ function saveLogFromUser(payload) {
 
   var range = event.range;
   var sheet = range.getSheet();
-  var sheetName = sheet.getName();
   var value = event.value;
   var cellAddress = range.getA1Notation();
   var selectedOptions = payload.data
@@ -25,8 +24,6 @@ function saveLogFromUser(payload) {
 
   console.log(
     "📋 [현재 입력 정보] 수정한 시트명: " +
-      sheetName +
-      " | 수정한 셀 주소: " +
       cellAddress +
       " | 입력된 값: " +
       value +
@@ -34,15 +31,6 @@ function saveLogFromUser(payload) {
       typeof value +
       ")",
   );
-
-  if (sheetName !== "계산기") {
-    console.log(
-      "⚠️ [종료] 수정한 시트가 '계산기'가 아니라 '" +
-        sheetName +
-        "' 이므로 로그를 기록하지 않고 종료합니다.",
-    );
-    return;
-  }
 
   if (value === "TRUE" || value === true) {
     if (selectedOptions.length > 0) {
