@@ -8,7 +8,7 @@ function saveLogFromUser(payload) {
 
   if (!event) return;
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  
+
   var mappingConfig = getMappingConfig(MASTER_FILE);
 
   var selectedOptions = payload.data
@@ -53,4 +53,14 @@ function getMappingConfig(masterFile) {
     if (cellAddress && optionName) acc[cellAddress] = optionName;
     return acc;
   }, {});
+}
+
+/**
+ * 설정 파일로부터 매핑 정보를 가져오는 인터페이스 함수입니다.
+ * 보안을 위해 실제 설정 시트의 위치를 직접 노출하지 않고 래핑된 형태로 제공합니다.
+ * @returns {Object} 셀 주소와 옵션 이름이 매핑된 객체
+ */
+function getConfig() {
+  if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+  return getMappingConfig(MASTER_FILE);
 }
