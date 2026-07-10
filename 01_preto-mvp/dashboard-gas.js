@@ -3,19 +3,22 @@ var DATA_CHECKBOX_RANGE_START = "B10";
 var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
 
-// 시트 파일이 열릴 때 자동으로 실행되는 구글 예약 함수입니다.
-function onOpen(e) {
-  if (!e || !e.range) return;
+function handleOpenSheet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(DASHBOARD_TAB_NAME);
+  if (!sheet) {
+    console.error("❌ [초기화 실패] 대시보드 시트를 찾을 수 없습니다.");
+    return;
+  }
 
-  var sheet = e.range.getSheet();
-  if (!sheet) return;
-
-  var reset = resetCheckbox(sheet);
-
-  reset([
-    joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-    SUBMIT_CELL,
-  ]);
+  try {
+    var config = app_Labor_Master_DB.getConfig();
+    resetCheckboxesFromConfig(sheet, config);
+    console.info("✅ [초기화 완료] 체크박스 리셋 성공");
+  } catch (error) {
+    console.error("❌ [초기화 오류] 원인: " + error.message);
+    toast("초기화 실패! 관리자에게 문의하세요.", "오류");
+  }
 }
 
 /**
@@ -93,8 +96,8 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
 
 function resetCheckboxesFromConfig(sheet, config) {
   var cellAddresses = Object.keys(config);
-    sheet.getRangeList(cellAddresses).setValue(false);
-  }
+  sheet.getRangeList(cellAddresses).setValue(false);
+}
 
 function getMappedData(sheet, values, [startRow, startColumn]) {
   try {
