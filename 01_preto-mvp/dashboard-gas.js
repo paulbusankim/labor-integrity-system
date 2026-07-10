@@ -2,6 +2,7 @@ var DASHBOARD_TAB_NAME = "계산기";
 var DATA_CHECKBOX_RANGE_START = "B10";
 var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
+var CONFIG = null
 
 function handleOpenSheet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -12,8 +13,8 @@ function handleOpenSheet(e) {
   }
 
   try {
-    var config = app_Labor_Master_DB.getConfig();
-    resetCheckboxesFromConfig(sheet, config);
+    if (!CONFIG) CONFIG = app_Labor_Master_DB.getConfig();
+    resetCheckboxesFromConfig(sheet, CONFIG);
     console.info("✅ [초기화 완료] 체크박스 리셋 성공");
   } catch (error) {
     console.error("❌ [초기화 오류] 원인: " + error.message);
