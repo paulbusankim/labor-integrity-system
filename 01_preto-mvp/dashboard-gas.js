@@ -45,6 +45,8 @@ function handleUserSubmit(e) {
   }
 
   try {
+    if (!CONFIG) CONFIG = app_Labor_Master_DB.getConfig();
+
     var isSubmitConfirmed = isSubmitRequested(e);
     var sheet = e.range.getSheet();
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
