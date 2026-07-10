@@ -7,9 +7,7 @@ function saveLogFromUser(payload) {
   var event = payload.event;
 
   if (!event) return;
-
-  MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  if (!MASTER_FILE) return;
+  if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
   
   var mappingConfig = getMappingConfig(MASTER_FILE);
 
