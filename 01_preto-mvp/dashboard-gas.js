@@ -91,11 +91,10 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
   return values.flat().some((val) => val === true);
 }
 
-function resetCheckbox(sheet) {
-  return function (ranges) {
-    sheet.getRangeList(ranges).setValue(false);
-  };
-}
+function resetCheckboxesFromConfig(sheet, config) {
+  var cellAddresses = Object.keys(config);
+    sheet.getRangeList(cellAddresses).setValue(false);
+  }
 
 function getMappedData(sheet, values, [startRow, startColumn]) {
   try {
