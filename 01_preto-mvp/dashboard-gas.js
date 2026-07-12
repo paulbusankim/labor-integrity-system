@@ -13,7 +13,7 @@ function handleOpenSheet(e) {
   }
 
   try {
-    if (!CONFIG) CONFIG = app_Labor_Master_DB.getConfig();
+    if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
     resetCheckboxesFromConfig(sheet, CONFIG);
     console.info("✅ [초기화 완료] 체크박스 리셋 성공");
   } catch (error) {
@@ -45,7 +45,7 @@ function handleUserSubmit(e) {
   }
 
   try {
-    if (!CONFIG) CONFIG = app_Labor_Master_DB.getConfig();
+    if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
 
     var isSubmitConfirmed = isSubmitRequested(e);
     var sheet = e.range.getSheet();
@@ -75,7 +75,7 @@ function handleUserSubmit(e) {
       data: mappedData,
     };
 
-    app_Labor_Master_DB.saveLogFromUser(payload);
+    lib_labor_master_db.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
