@@ -99,7 +99,10 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
 
 function resetCheckboxesFromConfig(sheet, config) {
   var cellAddresses = Object.keys(config);
-  sheet.getRangeList(cellAddresses).setValue(false);
+
+  Object.values(config).forEach((cellAddresses) => {
+    sheet.getRange(cellAddresses).setValue(false);
+  });
 }
 
 function getMappedData(sheet, values, [startRow, startColumn]) {
