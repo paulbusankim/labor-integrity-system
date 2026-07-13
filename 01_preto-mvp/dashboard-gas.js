@@ -48,15 +48,24 @@ function handleUserSubmit(e) {
 
   try {
     if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
+    var range = e.range;
+    var cellAddress = range.getA1Notation();
+    var cellValue = e.value;
 
-    var isSubmitConfirmed = isSubmitRequested(e);
     var sheet = e.range.getSheet();
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
       sheet,
       joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
     );
 
-    if (isSubmitConfirmed === false) return;
+    var submitRequestedStatus = isSubmitRequested(
+      cellAddress,
+      cellValue,
+      CONFIG["SUBMISSION_CONFIRMED"],
+    );
+
+    if (submitRequestedStatus === false) return;
+
     if (hasTrueUserCheckbox === false) return;
 
     var userSelectedRange = sheet.getRange(
@@ -86,11 +95,8 @@ function handleUserSubmit(e) {
   }
 }
 
-function isSubmitRequested(e) {
-  var range = e.range;
-  var cellAddress = range.getA1Notation();
-  var cellValue = e.value;
-  return cellAddress === SUBMIT_CELL && cellValue === "TRUE" ? true : false;
+function isSubmitRequested(cellAddress, cellValue, targetCellAddress) {
+  return cellAddress === targetCellAddress && cellValue === "TRUE";
 }
 
 function verifyUserCheckboxHasTrue(sheet, cellRange) {
