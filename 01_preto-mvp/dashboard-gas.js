@@ -51,34 +51,23 @@ function handleUserSubmit(e) {
     var range = e.range;
     var cellAddress = range.getA1Notation();
     var cellValue = e.value;
-
     var sheet = e.range.getSheet();
-    var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(
-      sheet,
-      joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-    );
+    var rangeCheckboxes = getCheckboxRange(sheet, CONFIG);
+    var valuesCheckboxes = rangeCheckboxes.getValues();
 
     var submitRequestedStatus = isSubmitRequested(
       cellAddress,
       cellValue,
       CONFIG["SUBMISSION_CONFIRMED"],
     );
-
     if (submitRequestedStatus === false) return;
 
+    var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(valuesCheckboxes);
     if (hasTrueUserCheckbox === false) return;
 
-    var userSelectedRange = sheet.getRange(
-      joinCellRange(DATA_CHECKBOX_RANGE_START, DATA_CHECKBOX_RANGE_END),
-    );
-
-    var startRow = userSelectedRange.getRow();
-    var startColumn = userSelectedRange.getColumn();
-
-    var userSelectedValues = userSelectedRange.getValues();
-    var mappedData = getMappedData(sheet, userSelectedValues, [
-      startRow,
-      startColumn,
+    var mappedData = getMappedData(valuesCheckboxes, [
+      CONFIG["CHECKBOX_RANGE_ROW"],
+      CONFIG["CHECKBOX_RANGE_COLUMN"],
     ]);
 
     var payload = {
@@ -99,9 +88,7 @@ function isSubmitRequested(cellAddress, cellValue, targetCellAddress) {
   return cellAddress === targetCellAddress && cellValue === "TRUE";
 }
 
-function verifyUserCheckboxHasTrue(sheet, cellRange) {
-  var checkboxRange = sheet.getRange(cellRange);
-  var values = checkboxRange.getValues();
+function verifyUserCheckboxHasTrue(values) {
   return values.flat().some((val) => val === true);
 }
 
@@ -109,7 +96,7 @@ function resetCheckboxes(range) {
   range.setValue(false);
 }
 
-function getMappedData(sheet, values, [startRow, startColumn]) {
+function getMappedData(values, [startRow, startColumn]) {
   try {
     return values.map(mapData);
   } catch (error) {
@@ -117,9 +104,7 @@ function getMappedData(sheet, values, [startRow, startColumn]) {
   }
 
   function mapData(row, index) {
-    var cellAddress = sheet
-      .getRange(startRow + index, startColumn)
-      .getA1Notation();
+    var cellAddress = getA1NotationFromIndices(startRow + index, startColumn);
     return {
       cell: cellAddress,
       values: row[0],
@@ -143,4 +128,9 @@ function getCheckboxRange(sheet, config) {
   const numRows = CONFIG["CHECKBOX_RANGE_NUMBER_ROWS"];
   const numCols = CONFIG["CHECKBOX_RANGE_NUMBER_COLUMNS"];
   return sheet.getRange(row, col, numRows, numCols);
+}
+
+function getA1NotationFromIndices(row, col) {
+  var colLetter = String.fromCharCode(64 + col);
+  return colLetter + row;
 }
