@@ -4,26 +4,6 @@ var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
 var CONFIG = null;
 
-function handleOpenSheet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(DASHBOARD_TAB_NAME);
-  if (!sheet) {
-    console.error("❌ [초기화 실패] 대시보드 시트를 찾을 수 없습니다.");
-    return;
-  }
-
-  try {
-    if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
-    var range = getCheckboxRange(sheet, CONFIG);
-    resetCheckboxes(range);
-
-    console.info("✅ [초기화 완료] 체크박스 리셋 성공");
-  } catch (error) {
-    console.error("❌ [초기화 오류] 원인: " + error.message);
-    toast("초기화 실패! 관리자에게 문의하세요.", "오류");
-  }
-}
-
 /**
  * [트리거 설정 필수 안내]
  * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
