@@ -98,11 +98,7 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
 }
 
 function resetCheckboxesFromConfig(sheet, config) {
-  const row = CONFIG["CHECKBOX_RANGE_ROW"];
-  const col = CONFIG["CHECKBOX_RANGE_COLUMN"];
-  const numRows = CONFIG["CHECKBOX_RANGE_NUMBER_ROWS"];
-  const numCols = CONFIG["CHECKBOX_RANGE_NUMBER_COLUMNS"];
-  sheet.getRange(row, col, numRows, numCols).setValue(false);
+  getValuesOfCheckboxes(sheet, config).setValue(false);
 }
 
 function getMappedData(sheet, values, [startRow, startColumn]) {
@@ -131,4 +127,12 @@ function joinCellRange(start, end) {
 function toast(msg, title) {
   var toastTitle = title ? title : "알림";
   SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
+}
+
+function getCheckboxRange(sheet, config) {
+  const row = CONFIG["CHECKBOX_RANGE_ROW"];
+  const col = CONFIG["CHECKBOX_RANGE_COLUMN"];
+  const numRows = CONFIG["CHECKBOX_RANGE_NUMBER_ROWS"];
+  const numCols = CONFIG["CHECKBOX_RANGE_NUMBER_COLUMNS"];
+  return sheet.getRange(row, col, numRows, numCols);
 }
