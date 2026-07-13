@@ -112,11 +112,6 @@ function getMappedData(values, [startRow, startColumn]) {
   }
 }
 
-function joinCellRange(start, end) {
-  if (!end) return start;
-  return start + ":" + end;
-}
-
 function toast(msg, title) {
   var toastTitle = title ? title : "알림";
   SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
