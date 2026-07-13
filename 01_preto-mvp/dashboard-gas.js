@@ -14,7 +14,9 @@ function handleOpenSheet(e) {
 
   try {
     if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
-    resetCheckboxesFromConfig(sheet, CONFIG);
+    var range = getCheckboxRange(sheet, CONFIG);
+    resetCheckboxes(range);
+
     console.info("✅ [초기화 완료] 체크박스 리셋 성공");
   } catch (error) {
     console.error("❌ [초기화 오류] 원인: " + error.message);
@@ -97,8 +99,8 @@ function verifyUserCheckboxHasTrue(sheet, cellRange) {
   return values.flat().some((val) => val === true);
 }
 
-function resetCheckboxesFromConfig(sheet, config) {
-  getValuesOfCheckboxes(sheet, config).setValue(false);
+function resetCheckboxes(range) {
+  range.setValue(false);
 }
 
 function getMappedData(sheet, values, [startRow, startColumn]) {
