@@ -48,9 +48,11 @@ function handleUserSubmit(e) {
       CONFIG["CHECKBOX_RANGE_COLUMN"],
     ]);
 
+    var confirmData = makeCellData(address, value);
+
     var payload = {
       event: e,
-      data: [...checkboxesData],
+      data: [...checkboxesData, confirmData],
     };
 
     lib_labor_master_db.saveLogFromUser(payload);
@@ -130,6 +132,14 @@ function getCachedConfig() {
     console.error("❌ [Cache Error] 원인: " + error.message);
     throw error;
   }
+}
+
+function makeCellData(address, value) {
+  var converted = value === "TRUE" ? true : false;
+  return {
+    cell: address,
+    value: converted,
+  };
 }
 
 /**
