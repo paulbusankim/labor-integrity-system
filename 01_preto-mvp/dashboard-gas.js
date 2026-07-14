@@ -52,7 +52,7 @@ function handleUserSubmit(e) {
 
     var payload = {
       event: e,
-      data: checkboxesData,
+      data: [...checkboxesData],
     };
 
     lib_labor_master_db.saveLogFromUser(payload);
