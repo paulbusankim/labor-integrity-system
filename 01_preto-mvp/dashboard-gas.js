@@ -57,6 +57,9 @@ function handleUserSubmit(e) {
 
     lib_labor_master_db.saveLogFromUser(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
+    SpreadsheetApp.flush();
+    Utilities.sleep(1000);
+    resetCheckboxes(rangeCheckboxes);
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
   } finally {
