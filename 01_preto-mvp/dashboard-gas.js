@@ -60,6 +60,7 @@ function handleUserSubmit(e) {
     SpreadsheetApp.flush();
     Utilities.sleep(1000);
     resetCheckboxes(rangeCheckboxes);
+    resetSubmissionCheckbox(range)
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
   } finally {
@@ -76,6 +77,10 @@ function verifyUserCheckboxHasTrue(values) {
 }
 
 function resetCheckboxes(range) {
+  range.setValue(false);
+}
+
+function resetSubmissionCheckbox(range) {
   range.setValue(false);
 }
 
