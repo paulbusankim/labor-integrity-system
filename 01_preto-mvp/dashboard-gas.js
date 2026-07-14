@@ -27,7 +27,7 @@ function handleUserSubmit(e) {
   }
 
   try {
-    if (!CONFIG) CONFIG = lib_labor_master_db.getConfig();
+    if (!CONFIG) CONFIG = getCachedConfig();
     var range = e.range;
     var cellAddress = range.getA1Notation();
     var cellValue = e.value;
@@ -108,4 +108,24 @@ function getCheckboxRange(sheet, config) {
 function getA1NotationFromIndices(row, col) {
   var colLetter = String.fromCharCode(64 + col);
   return colLetter + row;
+}
+
+function getCachedConfig() {
+  try {
+    var cache = CacheService.getScriptCache();
+    var cachedData = cache.get("MASTER_CONFIG");
+
+    if (cachedData) {
+      console.info("✅ [Cache Hit] 설정 정보를 캐시에서 로드합니다.");
+      return JSON.parse(cachedData);
+    }
+
+    console.info("⚠️ [Cache Miss] 외부 DB에서 설정을 로드합니다.");
+    var freshConfig = lib_labor_master_db.getConfig();
+    cache.put("MASTER_CONFIG", JSON.stringify(freshConfig), 1800);
+    return freshConfig;
+  } catch (error) {
+    console.error("❌ [Cache Error] 원인: " + error.message);
+    throw error;
+  }
 }
