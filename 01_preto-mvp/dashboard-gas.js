@@ -33,12 +33,10 @@ function handleUserSubmit(e) {
     var address = range.getA1Notation();
     var value = e.value;
 
-    var submitRequestedStatus = isSubmitRequested(
-      address,
-      value,
-      CONFIG["SUBMISSION_CONFIRMED"],
-    );
-    if (submitRequestedStatus === false) return;
+    var isConfirmed =
+      address === CONFIG["SUBMISSION_CONFIRMED"] && value === "TRUE";
+
+    if (isConfirmed === false) return;
 
     var rangeCheckboxes = getCheckboxRange(sheet, CONFIG);
     var valuesCheckboxes = rangeCheckboxes.getValues();
@@ -66,10 +64,6 @@ function handleUserSubmit(e) {
   } finally {
     lock.releaseLock();
   }
-}
-
-function isSubmitRequested(address, value, targetCellAddress) {
-  return address === targetCellAddress && value === "TRUE";
 }
 
 function verifyUserCheckboxHasTrue(values) {
