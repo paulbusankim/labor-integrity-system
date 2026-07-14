@@ -129,3 +129,23 @@ function getCachedConfig() {
     throw error;
   }
 }
+
+/**
+ * [관리자 전용]
+ * 캐시를 강제로 삭제하여 다음번 사용자 요청 시
+ * 외부 DB에서 최신 정보를 다시 가져오게 합니다.
+ */
+function forceReset() {
+  try {
+    var cache = CacheService.getScriptCache();
+    cache.remove("MASTER_CONFIG");
+    console.warn(
+      "🛡️ [Admin Action] MASTER_CONFIG 캐시가 강제로 삭제되었습니다.",
+    );
+  } catch (error) {
+    console.error(
+      "❌ [Admin Action Failed] 캐시 삭제 중 오류 발생: " + error.message,
+    );
+    throw error;
+  }
+}
