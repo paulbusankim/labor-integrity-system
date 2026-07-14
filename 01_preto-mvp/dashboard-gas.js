@@ -29,11 +29,9 @@ function handleUserSubmit(e) {
   try {
     if (!CONFIG) CONFIG = getCachedConfig();
     var range = e.range;
+    var sheet = range.getSheet();
     var cellAddress = range.getA1Notation();
     var cellValue = e.value;
-    var sheet = e.range.getSheet();
-    var rangeCheckboxes = getCheckboxRange(sheet, CONFIG);
-    var valuesCheckboxes = rangeCheckboxes.getValues();
 
     var submitRequestedStatus = isSubmitRequested(
       cellAddress,
@@ -42,6 +40,8 @@ function handleUserSubmit(e) {
     );
     if (submitRequestedStatus === false) return;
 
+    var rangeCheckboxes = getCheckboxRange(sheet, CONFIG);
+    var valuesCheckboxes = rangeCheckboxes.getValues();
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(valuesCheckboxes);
     if (hasTrueUserCheckbox === false) return;
 
@@ -60,7 +60,7 @@ function handleUserSubmit(e) {
     SpreadsheetApp.flush();
     Utilities.sleep(1000);
     resetCheckboxes(rangeCheckboxes);
-    resetSubmissionCheckbox(range)
+    resetSubmissionCheckbox(range);
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
   } finally {
