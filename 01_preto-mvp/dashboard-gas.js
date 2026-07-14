@@ -30,12 +30,12 @@ function handleUserSubmit(e) {
     if (!CONFIG) CONFIG = getCachedConfig();
     var range = e.range;
     var sheet = range.getSheet();
-    var cellAddress = range.getA1Notation();
-    var cellValue = e.value;
+    var address = range.getA1Notation();
+    var value = e.value;
 
     var submitRequestedStatus = isSubmitRequested(
-      cellAddress,
-      cellValue,
+      address,
+      value,
       CONFIG["SUBMISSION_CONFIRMED"],
     );
     if (submitRequestedStatus === false) return;
@@ -45,14 +45,14 @@ function handleUserSubmit(e) {
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(valuesCheckboxes);
     if (hasTrueUserCheckbox === false) return;
 
-    var mappedData = getMappedData(valuesCheckboxes, [
+    var checkboxesData = getMappedCheckboxes(valuesCheckboxes, [
       CONFIG["CHECKBOX_RANGE_ROW"],
       CONFIG["CHECKBOX_RANGE_COLUMN"],
     ]);
 
     var payload = {
       event: e,
-      data: mappedData,
+      data: checkboxesData,
     };
 
     lib_labor_master_db.saveLogFromUser(payload);
@@ -68,8 +68,8 @@ function handleUserSubmit(e) {
   }
 }
 
-function isSubmitRequested(cellAddress, cellValue, targetCellAddress) {
-  return cellAddress === targetCellAddress && cellValue === "TRUE";
+function isSubmitRequested(address, value, targetCellAddress) {
+  return address === targetCellAddress && value === "TRUE";
 }
 
 function verifyUserCheckboxHasTrue(values) {
@@ -84,11 +84,11 @@ function resetSubmissionCheckbox(range) {
   range.setValue(false);
 }
 
-function getMappedData(values, [startRow, startColumn]) {
+function getMappedCheckboxes(values, [startRow, startColumn]) {
   const mapData = (row, index) => {
-    var cellAddress = getA1NotationFromIndices(startRow + index, startColumn);
+    var address = getA1NotationFromIndices(startRow + index, startColumn);
     return {
-      cell: cellAddress,
+      cell: address,
       values: row[0],
     };
   };
@@ -96,7 +96,7 @@ function getMappedData(values, [startRow, startColumn]) {
   try {
     return values.map(mapData);
   } catch (error) {
-    console.log("error on getMappedData", error);
+    console.log("error on getMappedCheckboxes", error);
   }
 }
 
