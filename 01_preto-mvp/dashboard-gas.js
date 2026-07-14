@@ -77,18 +77,18 @@ function resetCheckboxes(range) {
 }
 
 function getMappedData(values, [startRow, startColumn]) {
-  try {
-    return values.map(mapData);
-  } catch (error) {
-    console.log("error on getMappedData", error);
-  }
-
-  function mapData(row, index) {
+  const mapData = (row, index) => {
     var cellAddress = getA1NotationFromIndices(startRow + index, startColumn);
     return {
       cell: cellAddress,
       values: row[0],
     };
+  };
+
+  try {
+    return values.map(mapData);
+  } catch (error) {
+    console.log("error on getMappedData", error);
   }
 }
 
