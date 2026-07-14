@@ -89,7 +89,7 @@ function getMappedCheckboxes(values, [startRow, startColumn]) {
     var address = getA1NotationFromIndices(startRow + index, startColumn);
     return {
       cell: address,
-      values: row[0],
+      value: row[0],
     };
   };
 
