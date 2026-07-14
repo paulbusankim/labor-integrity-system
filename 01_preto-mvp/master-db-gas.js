@@ -12,7 +12,7 @@ function saveLogFromUser(payload) {
   var mappingConfig = getMappingConfig(MASTER_FILE);
 
   var selectedOptions = payload.data
-    .filter((item) => item.values === true)
+    .filter((item) => item.value === true)
     .map((item) => {
       var option = mappingConfig[item.cell];
       if (!option) return null;
