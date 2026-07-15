@@ -51,12 +51,12 @@ function _saveLogFromUser(payload) {
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
-  const mappingConfig = _makeConfig(MASTER_FILE);
+  const config = _makeConfig(MASTER_FILE);
 
   const selectedOptions = payload.data
     .filter((item) => item.value === true)
     .map((item) => {
-      const option = mappingConfig[item.cell];
+      const option = config[item.cell];
       if (!option) return null;
       return option;
     })
