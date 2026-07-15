@@ -6,9 +6,18 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 
 function _saveLogFromUser(payload) {
+  const TAG = "[MasterDB:saveLog]";
+  
   if (!payload || !payload.event) return;
 
-  const event = payload.event;
+  const { value } = payload.event;
+  if (!value) {
+    console.warn(
+      `${TAG} 입력값 유효성 검사 실패: event.value가 비어있습니다.`,
+      { payload },
+    );
+    return;
+  }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
@@ -40,11 +49,6 @@ function _saveLogFromUser(payload) {
       console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
     }
   }
-}
-
-function hasUserSubmitTrue(event) {
-  const value = event.value;
-  return value === "TRUE" || value === true ? true : false;
 }
 
 function getMappingConfig(masterFile) {
