@@ -12,8 +12,8 @@ function _saveLogFromUser(payload) {
     console.error(`${TAG} 필수 데이터 누락: payload 또는 event가 없습니다.`);
     return;
   }
-
-  const { value } = payload.event;
+  const { event } = payload;
+  const { value } = event;
   if (!value) {
     console.warn(
       `${TAG} 입력값 유효성 검사 실패: event.value가 비어있습니다.`,
