@@ -55,7 +55,7 @@ function handleUserSubmit(e) {
       data: [...checkboxesData, confirmData],
     };
 
-    lib_labor_master_db.saveLogFromUser(payload);
+    lib_labor_master_db.saveCheckboxStatus(payload);
     toast("데이터를 저장했습니다.", "저장 완료");
     SpreadsheetApp.flush();
     Utilities.sleep(1000);
