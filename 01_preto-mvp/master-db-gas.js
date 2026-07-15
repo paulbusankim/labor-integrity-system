@@ -50,8 +50,11 @@ function _saveLogFromUser(payload) {
   }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-
   const config = _makeConfig(MASTER_FILE);
+  if (!config) {
+    console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
+    return;
+  }
 
   const selectedOptions = payload.data
     .filter((item) => item.value === true)
