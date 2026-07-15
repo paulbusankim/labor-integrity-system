@@ -6,9 +6,21 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 
 function _saveLogFromUser(payload) {
-  if (!payload || !payload.event) return;
+  const TAG = "[MasterDB:saveLog]";
 
-  const event = payload.event;
+  if (!payload || !payload.event) {
+    console.error(`${TAG} 필수 데이터 누락: payload 또는 event가 없습니다.`);
+    return;
+  }
+
+  const { value } = payload.event;
+  if (!value) {
+    console.warn(
+      `${TAG} 입력값 유효성 검사 실패: event.value가 비어있습니다.`,
+      { payload },
+    );
+    return;
+  }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
@@ -42,11 +54,6 @@ function _saveLogFromUser(payload) {
   }
 }
 
-function hasUserSubmitTrue(event) {
-  const value = event.value;
-  return value === "TRUE" || value === true ? true : false;
-}
-
 function getMappingConfig(masterFile) {
   const sheet = masterFile.getSheetByName("Config");
   const data = sheet.getDataRange().getValues();
@@ -63,14 +70,19 @@ function getMappingConfig(masterFile) {
  * 보안을 위해 실제 설정 시트의 위치를 직접 노출하지 않고 래핑된 형태로 제공합니다.
  * @returns {Object} 셀 주소와 옵션 이름이 매핑된 객체
  */
-function getConfig() {
+const _getConfig = () => {
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
   return getMappingConfig(MASTER_FILE);
-}
+};
 
 const MasterDB = {
   saveCheckboxStatus: _saveLogFromUser,
+  getConfig: _getConfig,
 };
+
+function getConfig() {
+  return MasterDB.getConfig();
+}
 
 function saveCheckboxStatus(payload) {
   return MasterDB.saveCheckboxStatus(payload);
