@@ -5,7 +5,7 @@ const MASTER_DB_SHEET_URL =
 
 const LOG_SHEET_NAME = "Log";
 
-function saveLogFromUser(payload) {
+function _saveLogFromUser(payload) {
   if (!payload || !payload.event) return;
 
   const event = payload.event;
@@ -66,4 +66,12 @@ function getMappingConfig(masterFile) {
 function getConfig() {
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
   return getMappingConfig(MASTER_FILE);
+}
+
+const MasterDB = {
+  saveCheckboxStatus: _saveLogFromUser,
+};
+
+function saveCheckboxStatus(payload) {
+  return MasterDB.saveCheckboxStatus(payload);
 }
