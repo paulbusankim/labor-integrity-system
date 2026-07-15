@@ -23,7 +23,7 @@ const _mapConfig = (masterFile) => {
  * 보안을 위해 실제 설정 시트의 위치를 직접 노출하지 않고 래핑된 형태로 제공합니다.
  * @returns {Object} 셀 주소와 옵션 이름이 매핑된 객체
  */
-const _getConfig = () => {
+const _loadMasterFile = () => {
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
   return _mapConfig(MASTER_FILE);
 };
@@ -93,7 +93,7 @@ function _saveLogFromUser(payload) {
 
 const MasterDB = {
   saveCheckboxStatus: _saveLogFromUser,
-  getConfig: _getConfig,
+  getConfig: _loadMasterFile,
 };
 
 function getConfig() {
