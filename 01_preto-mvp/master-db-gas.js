@@ -4,9 +4,10 @@ var MASTER_FILE = null;
 var LOG_SHEET_NAME = "Log";
 
 function saveLogFromUser(payload) {
+  if (!payload || !payload.event) return;
+
   var event = payload.event;
 
-  if (!event) return;
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
   var mappingConfig = getMappingConfig(MASTER_FILE);
