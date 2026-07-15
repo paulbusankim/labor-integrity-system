@@ -54,11 +54,6 @@ function _saveLogFromUser(payload) {
   }
 }
 
-function hasUserSubmitTrue(event) {
-  const value = event.value;
-  return value === "TRUE" || value === true ? true : false;
-}
-
 function getMappingConfig(masterFile) {
   const sheet = masterFile.getSheetByName("Config");
   const data = sheet.getDataRange().getValues();
