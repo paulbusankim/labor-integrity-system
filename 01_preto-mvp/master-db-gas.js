@@ -1,21 +1,23 @@
-var MASTER_DB_SHEET_URL =
+let MASTER_FILE = null;
+
+const MASTER_DB_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590";
-var MASTER_FILE = null;
-var LOG_SHEET_NAME = "Log";
+
+const LOG_SHEET_NAME = "Log";
 
 function saveLogFromUser(payload) {
   if (!payload || !payload.event) return;
 
-  var event = payload.event;
+  const event = payload.event;
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
-  var mappingConfig = getMappingConfig(MASTER_FILE);
+  const mappingConfig = getMappingConfig(MASTER_FILE);
 
-  var selectedOptions = payload.data
+  const selectedOptions = payload.data
     .filter((item) => item.value === true)
     .map((item) => {
-      var option = mappingConfig[item.cell];
+      const option = mappingConfig[item.cell];
       if (!option) return null;
       return option;
     })
@@ -25,8 +27,8 @@ function saveLogFromUser(payload) {
 
   if (hasUserSubmitTrue(event)) {
     try {
-      var logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
-      var timestamp = new Date();
+      const logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
+      const timestamp = new Date();
 
       selectedOptions.forEach((option) => {
         logSheet.appendRow([timestamp, option]);
@@ -41,16 +43,16 @@ function saveLogFromUser(payload) {
 }
 
 function hasUserSubmitTrue(event) {
-  var value = event.value;
+  const value = event.value;
   return value === "TRUE" || value === true ? true : false;
 }
 
 function getMappingConfig(masterFile) {
-  var sheet = masterFile.getSheetByName("Config");
-  var data = sheet.getDataRange().getValues();
+  const sheet = masterFile.getSheetByName("Config");
+  const data = sheet.getDataRange().getValues();
   return data.reduce(function (acc, row) {
-    var cellAddress = row[0];
-    var optionName = row[1];
+    const cellAddress = row[0];
+    const optionName = row[1];
     if (cellAddress && optionName) acc[cellAddress] = optionName;
     return acc;
   }, {});
