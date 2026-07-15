@@ -78,7 +78,14 @@ function _saveLogFromUser(payload) {
     })
     .filter((option) => option !== null);
 
-  if (selectedOptions.length === 0) return;
+  if (selectedOptions.length === 0) {
+    console.warn(
+      `${TAG} 제출 체크박스 검사 실패: 제출한 체크박스가 모두 false입니다.`,
+      { selectedOptions },
+    );
+
+    return;
+  }
 
   try {
     const logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
