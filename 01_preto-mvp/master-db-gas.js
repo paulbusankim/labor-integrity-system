@@ -5,6 +5,19 @@ const MASTER_DB_SHEET_URL =
 
 const LOG_SHEET_NAME = "Log";
 
+const getMappingConfig = (masterFile) => {
+  const sheet = masterFile.getSheetByName("Config");
+  const data = sheet.getDataRange().getValues();
+  const addCell = (acc, row) => {
+    const address = row[0];
+    const value = row[1];
+    if (address && value) acc[address] = value;
+    return acc;
+  };
+
+  return data.reduce(addCell, {});
+};
+
 function _saveLogFromUser(payload) {
   const TAG = "[MasterDB:saveLog]";
 
@@ -21,12 +34,18 @@ function _saveLogFromUser(payload) {
     );
     return;
   }
-  
+
   const { range } = event;
   if (!range) {
     console.warn(`${TAG} 입력값 유효성 검사 실패: range가 올바르지 않습니다.`, {
-      payload,
+      event,
     });
+    return;
+  }
+
+  const address = range.getA1Notation();
+  if (!address) {
+    console.warn(`${TAG} 입력값 유효성 검사 실패: range가 올바르지 않습니다.`);
     return;
   }
 
@@ -60,17 +79,6 @@ function _saveLogFromUser(payload) {
       console.log("❌ [시스템 오류 발생] 상세 원인: " + error.toString());
     }
   }
-}
-
-function getMappingConfig(masterFile) {
-  const sheet = masterFile.getSheetByName("Config");
-  const data = sheet.getDataRange().getValues();
-  return data.reduce(function (acc, row) {
-    const cellAddress = row[0];
-    const optionName = row[1];
-    if (cellAddress && optionName) acc[cellAddress] = optionName;
-    return acc;
-  }, {});
 }
 
 /**
