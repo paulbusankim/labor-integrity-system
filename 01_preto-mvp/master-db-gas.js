@@ -21,6 +21,14 @@ function _saveLogFromUser(payload) {
     );
     return;
   }
+  
+  const { range } = event;
+  if (!range) {
+    console.warn(`${TAG} 입력값 유효성 검사 실패: range가 올바르지 않습니다.`, {
+      payload,
+    });
+    return;
+  }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
