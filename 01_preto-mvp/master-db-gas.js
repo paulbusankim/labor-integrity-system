@@ -5,7 +5,7 @@ const MASTER_DB_SHEET_URL =
 
 const LOG_SHEET_NAME = "Log";
 
-const _mapConfig = (masterFile) => {
+const _makeConfigFromMaster = (masterFile) => {
   const sheet = masterFile.getSheetByName("Config");
   const data = sheet.getDataRange().getValues();
   const addCell = (acc, row) => {
@@ -25,7 +25,7 @@ const _mapConfig = (masterFile) => {
  */
 const _loadMasterFile = () => {
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  return _mapConfig(MASTER_FILE);
+  return _makeConfigFromMaster(MASTER_FILE);
 };
 
 function _saveLogFromUser(payload) {
@@ -61,7 +61,7 @@ function _saveLogFromUser(payload) {
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
-  const mappingConfig = _mapConfig(MASTER_FILE);
+  const mappingConfig = _makeConfigFromMaster(MASTER_FILE);
 
   const selectedOptions = payload.data
     .filter((item) => item.value === true)
