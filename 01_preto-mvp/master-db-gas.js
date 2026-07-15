@@ -7,8 +7,11 @@ const LOG_SHEET_NAME = "Log";
 
 function _saveLogFromUser(payload) {
   const TAG = "[MasterDB:saveLog]";
-  
-  if (!payload || !payload.event) return;
+
+  if (!payload || !payload.event) {
+    console.error(`${TAG} 필수 데이터 누락: payload 또는 event가 없습니다.`);
+    return;
+  }
 
   const { value } = payload.event;
   if (!value) {
