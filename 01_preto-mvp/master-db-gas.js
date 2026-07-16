@@ -5,6 +5,7 @@ const MASTER_DB_SHEET_URL =
 
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
+const CONTENT_SHEET_NAME = "Content";
 
 const _mapSheet = (masterFile, name) => {
   const sheet = masterFile.getSheetByName(name);
@@ -54,6 +55,14 @@ function _saveLogFromUser(payload) {
   const config = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
   if (!config) {
     console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
+    return;
+  }
+  const content = _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
+  if (!content) {
+    console.warn(
+      `${TAG} 시트 맵핑 실패: Content 시트 맵핑 데이터가 유효하지 않습니다.`,
+      { content },
+    );
     return;
   }
 
