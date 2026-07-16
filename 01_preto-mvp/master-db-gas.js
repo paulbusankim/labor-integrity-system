@@ -6,7 +6,7 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 
-const _makeConfig = (masterFile, name) => {
+const _mapSheet = (masterFile, name) => {
   const sheet = masterFile.getSheetByName(name);
   const data = sheet.getDataRange().getValues();
   const addCell = (acc, row) => {
@@ -51,7 +51,7 @@ function _saveLogFromUser(payload) {
   }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  const config = _makeConfig(MASTER_FILE, CONFIG_SHEET_NAME);
+  const config = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
   if (!config) {
     console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
     return;
@@ -108,7 +108,7 @@ const MasterDB = {
   getConfig: () => {
     if (!MASTER_FILE)
       MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-    return _makeConfig(MASTER_FILE, CONFIG_SHEET_NAME);
+    return _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
   },
 };
 
