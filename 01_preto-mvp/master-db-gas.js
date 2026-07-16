@@ -79,14 +79,15 @@ function _saveLogFromUser(payload) {
     return;
   }
 
-  const selectedOptions = payload.data
-    .filter((item) => item.value === true)
+  const valueCheckboxes = payload.data.filter((item) => item.value === true);
+
+  const selectedOptions = valueCheckboxes
     .map((item) => {
-      const option = config[item.cell];
-      if (!option) return null;
-      return option;
+      const value = content[item.cell];
+      if (!value) return null;
+      return value;
     })
-    .filter((option) => option !== null);
+    .filter((value) => value !== null);
 
   if (selectedOptions.length === 0) {
     console.warn(
