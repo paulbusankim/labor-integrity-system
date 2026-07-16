@@ -4,9 +4,10 @@ const MASTER_DB_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590";
 
 const LOG_SHEET_NAME = "Log";
+const CONFIG_SHEET_NAME = "Config";
 
-const _makeConfig = (masterFile) => {
-  const sheet = masterFile.getSheetByName("Config");
+const _makeConfig = (masterFile, name) => {
+  const sheet = masterFile.getSheetByName(name);
   const data = sheet.getDataRange().getValues();
   const addCell = (acc, row) => {
     const address = row[0];
@@ -50,7 +51,7 @@ function _saveLogFromUser(payload) {
   }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  const config = _makeConfig(MASTER_FILE);
+  const config = _makeConfig(MASTER_FILE, CONFIG_SHEET_NAME);
   if (!config) {
     console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
     return;
@@ -107,7 +108,7 @@ const MasterDB = {
   getConfig: () => {
     if (!MASTER_FILE)
       MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-    return _makeConfig(MASTER_FILE);
+    return _makeConfig(MASTER_FILE, CONFIG_SHEET_NAME);
   },
 };
 
