@@ -100,11 +100,11 @@ function _saveLogFromUser(payload) {
 
   try {
     const logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
-    const timestamp = new Date();
 
     selectedOptions.forEach((option) => {
-      logSheet.appendRow([timestamp, option]);
+      _appendRow(logSheet, option);
     });
+
     console.log(
       "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
     );
