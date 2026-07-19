@@ -33,8 +33,12 @@ const _getCache = (name) => {
 
 const _removeAllCache = () => {
   const cacheService = CacheService.getScriptCache();
+
   cacheNameList.forEach((name) => {
-    cache.remove(name);
+    const cache = cacheService.get(name);
+    if (!cache) return;
+    console.warn(`🛡️ [Admin Action] ${{ name, cache }} 캐시 삭제 시작합니다.`);
+    cacheService.remove(name);
     console.warn(`🛡️ [Admin Action] ${name} 캐시가 강제로 삭제되었습니다.`);
   });
 };
