@@ -52,6 +52,11 @@ const _mapSheet = (masterFile, name) => {
   return data.reduce(addCell, {});
 };
 
+const _appendRow = (sheet) => (value) => {
+  const timestamp = new Date();
+  sheet.appendRow([timestamp, value]);
+};
+
 function _saveLogFromUser(payload) {
   const TAG = "[MasterDB:saveLog]";
 
@@ -132,10 +137,9 @@ function _saveLogFromUser(payload) {
 
   try {
     const logSheet = MASTER_FILE.getSheetByName(LOG_SHEET_NAME);
+    const addRow = _appendRow(logSheet);
 
-    selectedOptions.forEach((option) => {
-      _appendRow(logSheet, option);
-    });
+    selectedOptions.forEach(addRow);
 
     console.log(
       "🎉 [성공] 마스터 DB의 Log 탭에 행이 성공적으로 추가되었습니다!",
