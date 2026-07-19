@@ -6,6 +6,38 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
+const cacheNameList = [];
+
+const _setCache = (name, value, callback) => {
+  const tag = "[MasterDB:_setCache]";
+
+  const cacheService = CacheService.getScriptCache();
+  cacheService.put(name, JSON.stringify(value), 1000);
+  console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
+    name,
+    value,
+  });
+
+  if (callback) callback();
+};
+
+const _getCache = (name) => {
+  const tag = "[MasterDB:_getCache]";
+  const cacheService = CacheService.getScriptCache();
+  const cache = cacheService.get(name);
+  if (!cache) return null;
+
+  console.info(`${tag} ✅ [Cache Hit] ${name}을 캐시에서 로드합니다.`);
+  return JSON.parse(cache);
+};
+
+const _removeAllCache = () => {
+  const cacheService = CacheService.getScriptCache();
+  cacheNameList.forEach((name) => {
+    cache.remove(name);
+    console.warn(`🛡️ [Admin Action] ${name} 캐시가 강제로 삭제되었습니다.`);
+  });
+};
 
 const _mapSheet = (masterFile, name) => {
   const sheet = masterFile.getSheetByName(name);
