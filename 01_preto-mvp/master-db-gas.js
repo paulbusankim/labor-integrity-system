@@ -100,11 +100,22 @@ function _saveLogFromUser(payload) {
   }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-  const config = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
+
+  let config = _getCache(cacheNameList.config);
   if (!config) {
-    console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
+    const value = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
+    if (!value) {
+      console.warn(
+        `${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`,
+        { value },
+      );
       return;
     }
+
+    _setCache(cacheNameList.config, value);
+    config = value;
+  }
+
   const content = _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
   if (!content) {
     console.warn(
