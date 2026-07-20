@@ -123,7 +123,9 @@ function _saveLogFromUser(payload) {
     return;
   }
 
-  const content = _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
+  const content = _getOrFetchCache(cacheNameList.content, () => {
+    return _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
+  });
   if (!content) {
     console.warn(
       `${TAG} 시트 맵핑 실패: Content 시트 맵핑 데이터가 유효하지 않습니다.`,
