@@ -68,6 +68,19 @@ const _appendRow = (sheet) => (value) => {
   sheet.appendRow([timestamp, value]);
 };
 
+const _getOrFetchCache = (cacheKey, fetchCallback) => {
+  let data = _getCache(cacheKey);
+  if (data) return data;
+
+  data = fetchCallback();
+
+  if (data) {
+    _setCache(cacheKey, data);
+  }
+
+  return data;
+};
+
 function _saveLogFromUser(payload) {
   const TAG = "[MasterDB:saveLog]";
 
@@ -101,19 +114,13 @@ function _saveLogFromUser(payload) {
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
-  let config = _getCache(cacheNameList.config);
-  if (!config) {
-    const value = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
-    if (!value) {
-      console.warn(
-        `${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`,
-        { value },
-      );
-      return;
-    }
+  const config = _getOrFetchCache(cacheNameList.config, () => {
+    return _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
+  });
 
-    _setCache(cacheNameList.config, value);
-    config = value;
+  if (!config) {
+    console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
+    return;
   }
 
   const content = _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
