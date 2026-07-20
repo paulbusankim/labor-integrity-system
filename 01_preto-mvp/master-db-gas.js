@@ -6,7 +6,10 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
-const cacheNameList = [];
+const cacheNameList = {
+  config: "config-cache",
+  content: "content-cache",
+};
 
 const _setCache = (name, value, callback) => {
   const tag = "[MasterDB:_setCache]";
@@ -33,8 +36,12 @@ const _getCache = (name) => {
 
 const _removeAllCache = () => {
   const cacheService = CacheService.getScriptCache();
+  const list = Object.keys(cacheNameList);
 
-  cacheNameList.forEach((name) => {
+  if (list.length === 0) return;
+
+  list.forEach((key) => {
+    const name = cacheNameList[key];
     const cache = cacheService.get(name);
     if (!cache) return;
     console.warn(`🛡️ [Admin Action] ${{ name, cache }} 캐시 삭제 시작합니다.`);
@@ -96,8 +103,8 @@ function _saveLogFromUser(payload) {
   const config = _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
   if (!config) {
     console.warn(`${TAG} Config 로드 실패: 불러온 config가 올바르지 않습니다.`);
-    return;
-  }
+      return;
+    }
   const content = _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
   if (!content) {
     console.warn(
