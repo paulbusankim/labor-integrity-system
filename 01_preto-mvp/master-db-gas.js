@@ -180,12 +180,17 @@ function _saveLogFromUser(payload) {
   }
 }
 
+const _exportSheetValues = (sheetName, cacheKey) => {
+  if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+  return _getOrFetchCache(cacheKey, () => {
+    return _mapSheet(MASTER_FILE, sheetName);
+  });
+};
+
 const MasterDB = {
   saveCheckboxStatus: _saveLogFromUser,
   getConfig: () => {
-    if (!MASTER_FILE)
-      MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
-    return _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
+    return _exportSheetValues(CONFIG_SHEET_NAME, cacheNameList.config);
   },
 };
 
