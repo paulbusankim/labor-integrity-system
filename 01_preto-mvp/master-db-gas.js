@@ -192,10 +192,17 @@ const MasterDB = {
   getConfig: () => {
     return _exportSheetValues(CONFIG_SHEET_NAME, cacheNameList.config);
   },
+  getContent: () => {
+    return _exportSheetValues(CONTENT_SHEET_NAME, cacheNameList.content);
+  },
 };
 
 function getConfig() {
   return MasterDB.getConfig();
+}
+
+function getContent() {
+  return MasterDB.getContent();
 }
 
 function saveCheckboxStatus(payload) {
