@@ -16,6 +16,17 @@ const _putCache = (name, value) => {
   });
 };
 
+const _getCache = (name) => {
+  const tag = "[Dashboard:_getCache]";
+  const cacheService = CacheService.getScriptCache();
+
+  const cache = cacheService.get(name);
+
+  if (!cache) return null;
+  console.info(`${tag} ✅ [Cache Hit] ${name}을 캐시에서 로드합니다.`);
+  return JSON.parse(cache);
+};
+
 /**
  * [트리거 설정 필수 안내]
  * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
@@ -128,13 +139,9 @@ function getA1NotationFromIndices(row, col) {
 
 function getCachedConfig() {
   try {
-    var cache = CacheService.getScriptCache();
-    var cachedData = cache.get("MASTER_CONFIG");
+    const cache = _getCache("MASTER_CONFIG");
 
-    if (cachedData) {
-      console.info("✅ [Cache Hit] 설정 정보를 캐시에서 로드합니다.");
-      return JSON.parse(cachedData);
-    }
+    if (cache) return cache;
 
     console.info("⚠️ [Cache Miss] 외부 DB에서 설정을 로드합니다.");
     var freshConfig = lib_labor_master_db.getConfig();
