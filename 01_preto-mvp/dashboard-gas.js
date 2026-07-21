@@ -188,13 +188,17 @@ function makeCellData(address, value) {
  * 캐시를 강제로 삭제하여 다음번 사용자 요청 시
  * 외부 DB에서 최신 정보를 다시 가져오게 합니다.
  */
-function forceReset() {
+function adminClearCache() {
   try {
-    var cache = CacheService.getScriptCache();
-    cache.remove("MASTER_CONFIG");
+    var cacheService = CacheService.getScriptCache();
+
+    // CACHE_KEYS의 '값(Value)'인 실제 캐시 이름("Dashboard:config" 등)을 순회하며 삭제
+    Object.values(CACHE_KEYS).forEach((cacheKey) => {
+      cacheService.remove(cacheKey);
       console.warn(
-      "🛡️ [Admin Action] MASTER_CONFIG 캐시가 강제로 삭제되었습니다.",
+        `🛡️ [Admin Action] ${cacheKey} 캐시가 강제로 삭제되었습니다.`,
       );
+    });
   } catch (error) {
     console.error(
       "❌ [Admin Action Failed] 캐시 삭제 중 오류 발생: " + error.message,
