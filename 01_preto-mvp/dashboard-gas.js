@@ -31,6 +31,19 @@ const _getCache = (name) => {
   return JSON.parse(cache);
 };
 
+const _getOrFetchCache = (cacheKey, fetchCallback) => {
+  let data = _getCache(cacheKey);
+  if (data) return data;
+
+  data = fetchCallback();
+
+  if (data) {
+    _putCache(cacheKey, data);
+  }
+
+  return data;
+};
+
 /**
  * [트리거 설정 필수 안내]
  * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
@@ -54,7 +67,11 @@ function handleUserSubmit(e) {
   }
 
   try {
-    if (!CONFIG) CONFIG = getCachedConfig();
+    if (!CONFIG)
+      CONFIG = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
+        return lib_labor_master_db.getConfig();
+      });
+
     var range = e.range;
     var sheet = range.getSheet();
     var address = range.getA1Notation();
@@ -175,9 +192,9 @@ function forceReset() {
   try {
     var cache = CacheService.getScriptCache();
     cache.remove("MASTER_CONFIG");
-    console.warn(
+      console.warn(
       "🛡️ [Admin Action] MASTER_CONFIG 캐시가 강제로 삭제되었습니다.",
-    );
+      );
   } catch (error) {
     console.error(
       "❌ [Admin Action Failed] 캐시 삭제 중 오류 발생: " + error.message,
