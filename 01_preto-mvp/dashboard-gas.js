@@ -158,23 +158,6 @@ function getA1NotationFromIndices(row, col) {
   return colLetter + row;
 }
 
-function getCachedConfig() {
-  try {
-    const cache = _getCache(CACHE_KEYS.CONFIG);
-
-    if (cache) return cache;
-
-    console.info("⚠️ [Cache Miss] 외부 DB에서 설정을 로드합니다.");
-    var freshConfig = lib_labor_master_db.getConfig();
-    _putCache(CACHE_KEYS.CONFIG, freshConfig);
-
-    return freshConfig;
-  } catch (error) {
-    console.error("❌ [Cache Error] 원인: " + error.message);
-    throw error;
-  }
-}
-
 function makeCellData(address, value) {
   var converted = value === "TRUE" ? true : false;
   return {
