@@ -3,6 +3,10 @@ var DATA_CHECKBOX_RANGE_START = "B10";
 var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
 var CONFIG = null;
+const CACHE_KEYS = {
+  CONFIG: "Dashboard:config",
+  CONTENT: "Dashboard:content",
+};
 
 const _putCache = (name, value) => {
   const tag = "[Dashboard:_putCache]";
@@ -139,13 +143,13 @@ function getA1NotationFromIndices(row, col) {
 
 function getCachedConfig() {
   try {
-    const cache = _getCache("MASTER_CONFIG");
+    const cache = _getCache(CACHE_KEYS.CONFIG);
 
     if (cache) return cache;
 
     console.info("⚠️ [Cache Miss] 외부 DB에서 설정을 로드합니다.");
     var freshConfig = lib_labor_master_db.getConfig();
-    _putCache("MASTER_CONFIG", freshConfig);
+    _putCache(CACHE_KEYS.CONFIG, freshConfig);
 
     return freshConfig;
   } catch (error) {
