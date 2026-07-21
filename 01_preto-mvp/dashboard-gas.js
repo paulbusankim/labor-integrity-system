@@ -4,6 +4,18 @@ var DATA_CHECKBOX_RANGE_END = "B12";
 var SUBMIT_CELL = "B14";
 var CONFIG = null;
 
+const _putCache = (name, value) => {
+  const tag = "[Dashboard:_putCache]";
+  const cacheService = CacheService.getScriptCache();
+
+  cacheService.put(name, JSON.stringify(value), 1000);
+
+  console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
+    name,
+    value,
+  });
+};
+
 /**
  * [트리거 설정 필수 안내]
  * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
@@ -126,7 +138,8 @@ function getCachedConfig() {
 
     console.info("⚠️ [Cache Miss] 외부 DB에서 설정을 로드합니다.");
     var freshConfig = lib_labor_master_db.getConfig();
-    cache.put("MASTER_CONFIG", JSON.stringify(freshConfig), 1800);
+    _putCache("MASTER_CONFIG", freshConfig);
+
     return freshConfig;
   } catch (error) {
     console.error("❌ [Cache Error] 원인: " + error.message);
