@@ -146,10 +146,10 @@ function toast(msg, title) {
 }
 
 function getCheckboxRange(sheet, config) {
-  const row = CONFIG["CHECKBOX_RANGE_ROW"];
-  const col = CONFIG["CHECKBOX_RANGE_COLUMN"];
-  const numRows = CONFIG["CHECKBOX_RANGE_NUMBER_ROWS"];
-  const numCols = CONFIG["CHECKBOX_RANGE_NUMBER_COLUMNS"];
+  const row = config["CHECKBOX_RANGE_ROW"];
+  const col = config["CHECKBOX_RANGE_COLUMN"];
+  const numRows = config["CHECKBOX_RANGE_NUMBER_ROWS"];
+  const numCols = config["CHECKBOX_RANGE_NUMBER_COLUMNS"];
   return sheet.getRange(row, col, numRows, numCols);
 }
 
