@@ -143,11 +143,10 @@ function handleUserSubmit(e) {
       cacheConfig["CHECKBOX_RANGE_COLUMN"],
     ]);
 
-    var confirmData = _makeCellData(address, value);
 
     var payload = {
       event: e,
-      data: [...checkboxesData, confirmData],
+      data: [...checkboxesData],
     };
 
     lib_labor_master_db.saveCheckboxStatus(payload);
