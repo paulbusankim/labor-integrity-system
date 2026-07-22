@@ -83,8 +83,7 @@ function handleUserSubmit(e) {
 
     var rangeCheckboxes = getCheckboxRange(sheet, cacheConfig);
     var valuesCheckboxes = rangeCheckboxes.getValues();
-    var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(valuesCheckboxes);
-    if (hasTrueUserCheckbox === false) return;
+    if (verifyUserCheckboxHasTrue(valuesCheckboxes) === false) return;
 
     var checkboxesData = getMappedCheckboxes(valuesCheckboxes, [
       cacheConfig["CHECKBOX_RANGE_ROW"],
