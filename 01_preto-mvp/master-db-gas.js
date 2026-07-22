@@ -134,19 +134,6 @@ function _saveLogFromUser(payload) {
     return;
   }
 
-  const isConfirmed =
-    value === "TRUE" && address === config["SUBMISSION_CONFIRMED"];
-  if (!isConfirmed) {
-    console.warn(
-      `${TAG} 제출 데이터 유효성 검사 실패: 제출한 데이터의 정보가 올바르지 않습니다.`,
-      {
-        value,
-        address,
-      },
-    );
-    return;
-  }
-
   const valueCheckboxes = payload.data.filter((item) => item.value === true);
 
   const selectedOptions = valueCheckboxes
