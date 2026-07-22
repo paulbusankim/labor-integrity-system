@@ -44,6 +44,18 @@ const _getOrFetchCache = (cacheKey, fetchCallback) => {
   return data;
 };
 
+function _verifyCheckboxHasTrue(values) {
+  return values.flat().some((val) => val === true);
+}
+
+function _resetCheckboxes(range) {
+  range.setValue(false);
+}
+
+function _resetSubmission(range) {
+  range.setValue(false);
+}
+
 /**
  * [트리거 설정 필수 안내]
  * 본 함수는 외부 DB 연동 및 권한 사용을 위해 '설치형 트리거'를 사용합니다.
@@ -83,7 +95,7 @@ function handleUserSubmit(e) {
 
     var rangeCheckboxes = getCheckboxRange(sheet, cacheConfig);
     var valuesCheckboxes = rangeCheckboxes.getValues();
-    if (verifyUserCheckboxHasTrue(valuesCheckboxes) === false) return;
+    if (_verifyCheckboxHasTrue(valuesCheckboxes) === false) return;
 
     var checkboxesData = getMappedCheckboxes(valuesCheckboxes, [
       cacheConfig["CHECKBOX_RANGE_ROW"],
@@ -101,8 +113,8 @@ function handleUserSubmit(e) {
     toast("데이터를 저장했습니다.", "저장 완료");
     SpreadsheetApp.flush();
     Utilities.sleep(1000);
-    resetCheckboxes(rangeCheckboxes);
-    resetSubmissionCheckbox(range);
+    _resetCheckboxes(rangeCheckboxes);
+    _resetSubmission(range);
   } catch (error) {
     console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
   } finally {
@@ -110,17 +122,7 @@ function handleUserSubmit(e) {
   }
 }
 
-function verifyUserCheckboxHasTrue(values) {
-  return values.flat().some((val) => val === true);
-}
 
-function resetCheckboxes(range) {
-  range.setValue(false);
-}
-
-function resetSubmissionCheckbox(range) {
-  range.setValue(false);
-}
 
 function getMappedCheckboxes(values, [startRow, startColumn]) {
   const mapData = (row, index) => {
