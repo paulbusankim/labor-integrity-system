@@ -44,8 +44,45 @@ const _getOrFetchCache = (cacheKey, fetchCallback) => {
   return data;
 };
 
+const getCheckboxRange = (sheet, config) => {
+  const row = config["CHECKBOX_RANGE_ROW"];
+  const col = config["CHECKBOX_RANGE_COLUMN"];
+  const numRows = config["CHECKBOX_RANGE_NUMBER_ROWS"];
+  const numCols = config["CHECKBOX_RANGE_NUMBER_COLUMNS"];
+  return sheet.getRange(row, col, numRows, numCols);
+};
+
 const _verifyCheckboxHasTrue = (values) =>
   values.flat().some((val) => val === true);
+
+const _getA1NotationFromIndices = (row, col) => {
+  var colLetter = String.fromCharCode(64 + col);
+  return colLetter + row;
+};
+
+const _getMappedCheckboxes = (values, [startRow, startColumn]) => {
+  const mapData = (row, index) => {
+    var address = _getA1NotationFromIndices(startRow + index, startColumn);
+    return {
+      cell: address,
+      value: row[0],
+    };
+  };
+
+  try {
+    return values.map(mapData);
+  } catch (error) {
+    console.log("error on _getMappedCheckboxes", error);
+  }
+};
+
+const _makeCellData = (address, value) => {
+  var converted = value === "TRUE" ? true : false;
+  return {
+    cell: address,
+    value: converted,
+  };
+};
 
 const _resetCheckboxes = (range) => {
   range.setValue(false);
@@ -54,6 +91,11 @@ const _resetCheckboxes = (range) => {
 const _resetSubmission = (range) => {
   range.setValue(false);
 };
+
+function toast(msg, title) {
+  var toastTitle = title ? title : "알림";
+  SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
+}
 
 /**
  * [트리거 설정 필수 안내]
@@ -96,12 +138,12 @@ function handleUserSubmit(e) {
     var valuesCheckboxes = rangeCheckboxes.getValues();
     if (_verifyCheckboxHasTrue(valuesCheckboxes) === false) return;
 
-    var checkboxesData = getMappedCheckboxes(valuesCheckboxes, [
+    var checkboxesData = _getMappedCheckboxes(valuesCheckboxes, [
       cacheConfig["CHECKBOX_RANGE_ROW"],
       cacheConfig["CHECKBOX_RANGE_COLUMN"],
     ]);
 
-    var confirmData = makeCellData(address, value);
+    var confirmData = _makeCellData(address, value);
 
     var payload = {
       event: e,
@@ -119,48 +161,6 @@ function handleUserSubmit(e) {
   } finally {
     lock.releaseLock();
   }
-}
-
-function getMappedCheckboxes(values, [startRow, startColumn]) {
-  const mapData = (row, index) => {
-    var address = getA1NotationFromIndices(startRow + index, startColumn);
-    return {
-      cell: address,
-      value: row[0],
-    };
-  };
-
-  try {
-    return values.map(mapData);
-  } catch (error) {
-    console.log("error on getMappedCheckboxes", error);
-  }
-}
-
-function toast(msg, title) {
-  var toastTitle = title ? title : "알림";
-  SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
-}
-
-function getCheckboxRange(sheet, config) {
-  const row = config["CHECKBOX_RANGE_ROW"];
-  const col = config["CHECKBOX_RANGE_COLUMN"];
-  const numRows = config["CHECKBOX_RANGE_NUMBER_ROWS"];
-  const numCols = config["CHECKBOX_RANGE_NUMBER_COLUMNS"];
-  return sheet.getRange(row, col, numRows, numCols);
-}
-
-function getA1NotationFromIndices(row, col) {
-  var colLetter = String.fromCharCode(64 + col);
-  return colLetter + row;
-}
-
-function makeCellData(address, value) {
-  var converted = value === "TRUE" ? true : false;
-  return {
-    cell: address,
-    value: converted,
-  };
 }
 
 /**
