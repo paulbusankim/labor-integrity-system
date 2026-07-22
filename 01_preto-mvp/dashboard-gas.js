@@ -76,14 +76,6 @@ const _getMappedCheckboxes = (values, [startRow, startColumn]) => {
   }
 };
 
-const _makeCellData = (address, value) => {
-  var converted = value === "TRUE" ? true : false;
-  return {
-    cell: address,
-    value: converted,
-  };
-};
-
 const _resetCheckboxes = (range) => {
   range.setValue(false);
 };
@@ -142,7 +134,6 @@ function handleUserSubmit(e) {
       cacheConfig["CHECKBOX_RANGE_ROW"],
       cacheConfig["CHECKBOX_RANGE_COLUMN"],
     ]);
-
 
     var payload = {
       event: e,
