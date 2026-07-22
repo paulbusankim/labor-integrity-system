@@ -67,29 +67,28 @@ function handleUserSubmit(e) {
   }
 
   try {
-    if (!CONFIG)
-      CONFIG = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
-        return lib_labor_master_db.getConfig();
-      });
-
     var range = e.range;
     var sheet = range.getSheet();
     var address = range.getA1Notation();
     var value = e.value;
 
+    const cacheConfig = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
+      return lib_labor_master_db.getConfig();
+    });
+
     var isConfirmed =
-      address === CONFIG["SUBMISSION_CONFIRMED"] && value === "TRUE";
+      address === cacheConfig["SUBMISSION_CONFIRMED"] && value === "TRUE";
 
     if (isConfirmed === false) return;
 
-    var rangeCheckboxes = getCheckboxRange(sheet, CONFIG);
+    var rangeCheckboxes = getCheckboxRange(sheet, cacheConfig);
     var valuesCheckboxes = rangeCheckboxes.getValues();
     var hasTrueUserCheckbox = verifyUserCheckboxHasTrue(valuesCheckboxes);
     if (hasTrueUserCheckbox === false) return;
 
     var checkboxesData = getMappedCheckboxes(valuesCheckboxes, [
-      CONFIG["CHECKBOX_RANGE_ROW"],
-      CONFIG["CHECKBOX_RANGE_COLUMN"],
+      cacheConfig["CHECKBOX_RANGE_ROW"],
+      cacheConfig["CHECKBOX_RANGE_COLUMN"],
     ]);
 
     var confirmData = makeCellData(address, value);
