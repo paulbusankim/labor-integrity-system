@@ -44,17 +44,16 @@ const _getOrFetchCache = (cacheKey, fetchCallback) => {
   return data;
 };
 
-function _verifyCheckboxHasTrue(values) {
-  return values.flat().some((val) => val === true);
-}
+const _verifyCheckboxHasTrue = (values) =>
+  values.flat().some((val) => val === true);
 
-function _resetCheckboxes(range) {
+const _resetCheckboxes = (range) => {
   range.setValue(false);
-}
+};
 
-function _resetSubmission(range) {
+const _resetSubmission = (range) => {
   range.setValue(false);
-}
+};
 
 /**
  * [트리거 설정 필수 안내]
@@ -121,8 +120,6 @@ function handleUserSubmit(e) {
     lock.releaseLock();
   }
 }
-
-
 
 function getMappedCheckboxes(values, [startRow, startColumn]) {
   const mapData = (row, index) => {
