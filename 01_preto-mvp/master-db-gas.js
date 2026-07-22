@@ -88,29 +88,6 @@ function _saveLogFromUser(payload) {
     console.error(`${TAG} 필수 데이터 누락: payload 또는 event가 없습니다.`);
     return;
   }
-  const { event } = payload;
-  const { value } = event;
-  if (!value) {
-    console.warn(
-      `${TAG} 입력값 유효성 검사 실패: event.value가 비어있습니다.`,
-      { payload },
-    );
-    return;
-  }
-
-  const { range } = event;
-  if (!range) {
-    console.warn(`${TAG} 입력값 유효성 검사 실패: range가 올바르지 않습니다.`, {
-      event,
-    });
-    return;
-  }
-
-  const address = range.getA1Notation();
-  if (!address) {
-    console.warn(`${TAG} 입력값 유효성 검사 실패: range가 올바르지 않습니다.`);
-    return;
-  }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
