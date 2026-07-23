@@ -5,7 +5,7 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
-const cacheNameList = {
+const CACHE_KEYS = {
   config: "config-cache",
   content: "content-cache",
 };
@@ -91,7 +91,7 @@ function _saveLogFromUser(payload) {
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
 
-  const config = _getOrFetchCache(cacheNameList.config, () => {
+  const config = _getOrFetchCache(CACHE_KEYS.config, () => {
     return _mapSheet(MASTER_FILE, CONFIG_SHEET_NAME);
   });
 
@@ -100,7 +100,7 @@ function _saveLogFromUser(payload) {
     return;
   }
 
-  const content = _getOrFetchCache(cacheNameList.content, () => {
+  const content = _getOrFetchCache(CACHE_KEYS.content, () => {
     return _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
   });
   if (!content) {
@@ -154,10 +154,10 @@ const _exportSheetValues = (sheetName, cacheKey) => {
 const MasterDB = {
   saveCheckboxStatus: _saveLogFromUser,
   getConfig: () => {
-    return _exportSheetValues(CONFIG_SHEET_NAME, cacheNameList.config);
+    return _exportSheetValues(CONFIG_SHEET_NAME, CACHE_KEYS.config);
   },
   getContent: () => {
-    return _exportSheetValues(CONTENT_SHEET_NAME, cacheNameList.content);
+    return _exportSheetValues(CONTENT_SHEET_NAME, CACHE_KEYS.content);
   },
 };
 
@@ -180,12 +180,12 @@ function saveCheckboxStatus(payload) {
 function adminRemoveAllCache() {
   const tag = "Master-DB:_removeAllCache:Admin ACtion";
   const cacheService = CacheService.getScriptCache();
-  const list = Object.keys(cacheNameList);
+  const list = Object.keys(CACHE_KEYS);
 
   if (list.length === 0) return;
 
   list.forEach((key) => {
-    const name = cacheNameList[key];
+    const name = CACHE_KEYS[key];
     const cache = cacheService.get(name);
     if (!cache) return;
     cacheService.remove(name);
