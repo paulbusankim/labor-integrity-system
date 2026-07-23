@@ -94,6 +94,35 @@ const _resetSubmission = (range) => {
   range.setValue(false);
 };
 
+const _resetContent = (sheet, cacheContent) => {
+  const tag = "Dashboard:_resetContent";
+  const entries = Object.entries(cacheContent);
+  const totalCount = entries.length;
+  let successCount = 0;
+  let failCount = 0;
+
+  log("INFO", tag, `총 ${totalCount}개의 셀 콘텐츠 리셋 시작`, { totalCount });
+
+  entries.forEach(([address, value]) => {
+    if (!value) return;
+
+    try {
+      sheet.getRange(address).setValue(value);
+      successCount++;
+    } catch (error) {
+      failCount++;
+      log("ERROR", tag, `${address}값 "${value}"로 리셋실패`, { error });
+    }
+  });
+
+  log(
+    "INFO",
+    tag,
+    `콘텐츠 리셋 작업 완료 | 성공: ${successCount}개, 실패: ${failCount}개`,
+    { totalCount, successCount, failCount },
+  );
+};
+
 function toast(msg, title) {
   var toastTitle = title ? title : "알림";
   SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
@@ -158,6 +187,11 @@ function handleUserSubmit(e) {
     Utilities.sleep(1000);
     _resetCheckboxes(rangeCheckboxes);
     _resetSubmission(range);
+
+    const cacheContent = _getOrFetchCache(CACHE_KEYS.CONTENT, () => {
+      return lib_labor_master_db.getContent();
+    });
+    _resetContent(sheet, cacheContent);
   } catch (error) {
     log("ERROR", tag, `데이터 저장 실패`, { error });
   } finally {
