@@ -21,7 +21,7 @@ const _getCache = (name) => {
 
   const cache = cacheService.get(name);
 
-  if (!cache) return null;
+  if (!cache) return null_getMappedCheckboxes;
   console.info(`${tag} ✅ [Cache Hit] ${name}을 캐시에서 로드합니다.`);
   return JSON.parse(cache);
 };
@@ -39,7 +39,7 @@ const _getOrFetchCache = (cacheKey, fetchCallback) => {
   return data;
 };
 
-const getCheckboxRange = (sheet, config) => {
+const _getCheckboxRange = (sheet, config) => {
   const row = config["CHECKBOX_RANGE_ROW"];
   const col = config["CHECKBOX_RANGE_COLUMN"];
   const numRows = config["CHECKBOX_RANGE_NUMBER_ROWS"];
@@ -121,7 +121,7 @@ function handleUserSubmit(e) {
 
     if (isConfirmed === false) return;
 
-    var rangeCheckboxes = getCheckboxRange(sheet, cacheConfig);
+    var rangeCheckboxes = _getCheckboxRange(sheet, cacheConfig);
     var valuesCheckboxes = rangeCheckboxes.getValues();
     if (_verifyCheckboxHasTrue(valuesCheckboxes) === false) return;
 
