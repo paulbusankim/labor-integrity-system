@@ -1,3 +1,20 @@
+const log = (level, tag, message, data = null) => {
+  const formats = {
+    INFO: { icon: "ℹ️", method: console.info },
+    WARN: { icon: "⚠️", method: console.warn },
+    ERROR: { icon: "❌", method: console.error },
+    DEBUG: { icon: "🐛", method: console.debug || console.log },
+  };
+
+  const current = formats[level] || formats.INFO;
+  const timestamp = new Date().toISOString();
+
+  current.method(
+    `[${timestamp}] ${current.icon} [${level}] [${tag}] ${message}`,
+    data ? data : "",
+  );
+};
+
 const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
@@ -6,25 +23,21 @@ const CACHE_KEYS = {
 const CACHE_TTL = 21600;
 
 const _putCache = (name, value) => {
-  const tag = "[Dashboard:_putCache]";
+  const tag = "Dashboard:_putCache";
   const cacheService = CacheService.getScriptCache();
 
   cacheService.put(name, JSON.stringify(value), CACHE_TTL);
-
-  console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
-    name,
-    value,
-  });
+  log("INFO", tag, `${name} 캐시 저장`, { name, value });
 };
 
 const _getCache = (name) => {
-  const tag = "[Dashboard:_getCache]";
+  const tag = "Dashboard:_getCache";
   const cacheService = CacheService.getScriptCache();
 
   const cache = cacheService.get(name);
 
-  if (!cache) return null_getMappedCheckboxes;
-  console.info(`${tag} ✅ [Cache Hit] ${name}을 캐시에서 로드합니다.`);
+  if (!cache) return null;
+  log("INFO", tag, `${name} 캐시 로드`, { name });
   return JSON.parse(cache);
 };
 
@@ -99,13 +112,15 @@ function toast(msg, title) {
  * - 반드시 '수정 시(onEdit)'를 선택해야 정상적으로 작동합니다.
  */
 function handleUserSubmit(e) {
+  const tag = "Dashboard:handleUserSubmit";
+
   if (!e || !e.range) return;
 
   var lock = LockService.getUserLock();
   try {
     lock.waitLock(10000);
   } catch (error) {
-    console.warn("이전 작업이 진행 중입니다. 잠금 획득 실패.");
+    log("WARN", tag, `이전 작업이 진행 중. 잠금 획득 실패.`);
   }
 
   try {
@@ -144,7 +159,7 @@ function handleUserSubmit(e) {
     _resetCheckboxes(rangeCheckboxes);
     _resetSubmission(range);
   } catch (error) {
-    console.error(`[오류] 데이터 저장 실패 | 원인: ${error.message}`);
+    log("ERROR", tag, `데이터 저장 실패`, { error });
   } finally {
     lock.releaseLock();
   }
@@ -156,20 +171,18 @@ function handleUserSubmit(e) {
  * 외부 DB에서 최신 정보를 다시 가져오게 합니다.
  */
 function adminClearCache() {
+  const tag = "Dashboard:adminClearCache:Admin Action";
   try {
     var cacheService = CacheService.getScriptCache();
 
-    // CACHE_KEYS의 '값(Value)'인 실제 캐시 이름("Dashboard:config" 등)을 순회하며 삭제
     Object.values(CACHE_KEYS).forEach((cacheKey) => {
       cacheService.remove(cacheKey);
-      console.warn(
-        `🛡️ [Admin Action] ${cacheKey} 캐시가 강제로 삭제되었습니다.`,
-      );
+      log("WARN", tag, `관리자 권한으로 ${cacheKey} 캐시 강제 삭제`, {
+        cacheKey,
+      });
     });
   } catch (error) {
-    console.error(
-      "❌ [Admin Action Failed] 캐시 삭제 중 오류 발생: " + error.message,
-    );
+    log("ERROR", tag, "관리자 권한으로 캐시 강제 삭제 중 오류 발생", { error });
     throw error;
   }
 }
