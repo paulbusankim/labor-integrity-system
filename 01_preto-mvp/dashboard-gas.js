@@ -2,12 +2,14 @@ const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
 };
+// 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
+const CACHE_TTL = 21600;
 
 const _putCache = (name, value) => {
   const tag = "[Dashboard:_putCache]";
   const cacheService = CacheService.getScriptCache();
 
-  cacheService.put(name, JSON.stringify(value), 1000);
+  cacheService.put(name, JSON.stringify(value), CACHE_TTL);
 
   console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
     name,

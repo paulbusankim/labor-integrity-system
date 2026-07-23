@@ -1,5 +1,4 @@
 let MASTER_FILE = null;
-
 const MASTER_DB_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/1Egi76V4st202iYPAaQqjqHppV0Ej1Wc01FBPsqNVFSc/edit?gid=920517590#gid=920517590";
 
@@ -10,12 +9,14 @@ const cacheNameList = {
   config: "config-cache",
   content: "content-cache",
 };
+// 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
+const CACHE_TTL = 21600;
 
 const _setCache = (name, value, callback) => {
   const tag = "[MasterDB:_setCache]";
 
   const cacheService = CacheService.getScriptCache();
-  cacheService.put(name, JSON.stringify(value), 1000);
+  cacheService.put(name, JSON.stringify(value), CACHE_TTL);
   console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
     name,
     value,
