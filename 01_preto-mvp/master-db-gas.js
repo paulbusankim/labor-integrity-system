@@ -12,15 +12,30 @@ const cacheNameList = {
 // 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
 const CACHE_TTL = 21600;
 
+const log = (level, tag, message, data = null) => {
+  const formats = {
+    INFO: { icon: "ℹ️", method: console.info },
+    WARN: { icon: "⚠️", method: console.warn },
+    ERROR: { icon: "❌", method: console.error },
+    DEBUG: { icon: "🐛", method: console.debug || console.log },
+  };
+
+  const current = formats[level] || formats.INFO;
+  const timestamp = new Date().toISOString();
+
+  current.method(
+    `[${timestamp}] ${current.icon} [${level}] [${tag}] ${message}`,
+    data ? data : "",
+  );
+};
+
 const _setCache = (name, value, callback) => {
   const tag = "[MasterDB:_setCache]";
 
   const cacheService = CacheService.getScriptCache();
   cacheService.put(name, JSON.stringify(value), CACHE_TTL);
-  console.info(`${tag} ✅ [Cache Hit]${name}을 캐시에 저장합니다.`, {
-    name,
-    value,
-  });
+
+  log("INFO", tag, `${name} 캐시 저장`, { name, value });
 
   if (callback) callback();
 };
@@ -31,11 +46,12 @@ const _getCache = (name) => {
   const cache = cacheService.get(name);
   if (!cache) return null;
 
-  console.info(`${tag} ✅ [Cache Hit] ${name}을 캐시에서 로드합니다.`);
+  log("INFO", tag, `${name} 캐시 로드`, { name });
   return JSON.parse(cache);
 };
 
 const _removeAllCache = () => {
+  const tag = "Master-DB:_removeAllCache:Admin ACtion";
   const cacheService = CacheService.getScriptCache();
   const list = Object.keys(cacheNameList);
 
@@ -45,9 +61,10 @@ const _removeAllCache = () => {
     const name = cacheNameList[key];
     const cache = cacheService.get(name);
     if (!cache) return;
-    console.warn(`🛡️ [Admin Action] ${{ name, cache }} 캐시 삭제 시작합니다.`);
     cacheService.remove(name);
-    console.warn(`🛡️ [Admin Action] ${name} 캐시가 강제로 삭제되었습니다.`);
+    log("WARN", tag, `관리자 권한으로 ${key} 캐시 강제 삭제`, {
+      key,
+    });
   });
 };
 
