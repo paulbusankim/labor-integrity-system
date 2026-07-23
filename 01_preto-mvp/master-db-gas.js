@@ -50,24 +50,6 @@ const _getCache = (name) => {
   return JSON.parse(cache);
 };
 
-const _removeAllCache = () => {
-  const tag = "Master-DB:_removeAllCache:Admin ACtion";
-  const cacheService = CacheService.getScriptCache();
-  const list = Object.keys(cacheNameList);
-
-  if (list.length === 0) return;
-
-  list.forEach((key) => {
-    const name = cacheNameList[key];
-    const cache = cacheService.get(name);
-    if (!cache) return;
-    cacheService.remove(name);
-    log("WARN", tag, `관리자 권한으로 ${key} 캐시 강제 삭제`, {
-      key,
-    });
-  });
-};
-
 const _mapSheet = (masterFile, name) => {
   const sheet = masterFile.getSheetByName(name);
   const data = sheet.getDataRange().getValues();
@@ -189,4 +171,26 @@ function getContent() {
 
 function saveCheckboxStatus(payload) {
   return MasterDB.saveCheckboxStatus(payload);
+}
+/**
+ * [관리자 전용]
+ * 캐시를 강제로 삭제하여 다음번 사용자 요청 시
+ * 외부 DB에서 최신 정보를 다시 가져오게 합니다.
+ */
+function adminRemoveAllCache() {
+  const tag = "Master-DB:_removeAllCache:Admin ACtion";
+  const cacheService = CacheService.getScriptCache();
+  const list = Object.keys(cacheNameList);
+
+  if (list.length === 0) return;
+
+  list.forEach((key) => {
+    const name = cacheNameList[key];
+    const cache = cacheService.get(name);
+    if (!cache) return;
+    cacheService.remove(name);
+    log("WARN", tag, `관리자 권한으로 ${key} 캐시 강제 삭제`, {
+      key,
+    });
+  });
 }
