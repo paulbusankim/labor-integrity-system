@@ -1,8 +1,3 @@
-var DASHBOARD_TAB_NAME = "계산기";
-var DATA_CHECKBOX_RANGE_START = "B10";
-var DATA_CHECKBOX_RANGE_END = "B12";
-var SUBMIT_CELL = "B14";
-var CONFIG = null;
 const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
