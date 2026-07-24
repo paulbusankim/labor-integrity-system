@@ -123,10 +123,23 @@ const _resetContent = (sheet, cacheContent) => {
   );
 };
 
-function toast(msg, title) {
-  var toastTitle = title ? title : "알림";
-  SpreadsheetApp.getActiveSpreadsheet().toast(msg, toastTitle);
-}
+const _showToast = (msg, level = "INFO", title = null) => {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 레벨별 고정 이모지와 기본 제목 매핑
+  const formats = {
+    INFO: { icon: "ℹ️", defaultTitle: "알림" },
+    SUCCESS: { icon: "🎉", defaultTitle: "성공" },
+    WARN: { icon: "⚠️", defaultTitle: "경고" },
+    ERROR: { icon: "❌", defaultTitle: "오류" },
+  };
+
+  const current = formats[level] || formats.INFO;
+  const finalTitle = title ? title : current.defaultTitle;
+
+  // 이모지를 포함한 포맷팅된 메시지 출력
+  ss.toast(`${current.icon} ${msg}`, finalTitle, 5); // 표시 시간(초) 설정 가능
+};
 
 /**
  * [트리거 설정 필수 안내]
@@ -181,8 +194,16 @@ function handleUserSubmit(e) {
       data: [...checkboxesData],
     };
 
-    lib_labor_master_db.saveCheckboxStatus(payload);
-    toast("데이터를 저장했습니다.", "저장 완료");
+    const { status, message, data } =
+      lib_labor_master_db.saveCheckboxStatus(payload);
+    if (status === false) {
+      log("WARN", tag, `${message}`, { data });
+      _showToast("데이터를 저장하는 중 오류가 발생했습니다.", "ERROR");
+      SpreadsheetApp.flush();
+      Utilities.sleep(1000);
+      return;
+    }
+    _showToast("데이터를 저장했습니다.", "SUCCESS");
     SpreadsheetApp.flush();
     Utilities.sleep(1000);
     _resetCheckboxes(rangeCheckboxes);
