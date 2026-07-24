@@ -50,6 +50,17 @@ const _getCache = (name) => {
   return JSON.parse(cache);
 };
 
+const _getValuesSheetContent = (masterFile, sheetName) => {
+  const sheet = masterFile.getSheetByName(sheetName);
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  if (lastRow === 0 || lastCol === 0) return [];
+
+  const range = sheet.getRange(1, 1, lastRow, lastCol);
+  const values = range.getValues();
+  return values;
+};
+
 const _mapSheet = (masterFile, name) => {
   const sheet = masterFile.getSheetByName(name);
   const data = sheet.getDataRange().getValues();
@@ -90,6 +101,20 @@ function _saveLogFromUser(payload) {
   }
 
   if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+
+  const valuesSheetContent = _getValuesSheetContent(
+    MASTER_FILE,
+    CONTENT_SHEET_NAME,
+  );
+  if (valuesSheetContent.length === 0) {
+    return {
+      status: false,
+      message: `Master-db-sheet:${CONTENT_SHEET_NAME}시트가 비어있습니다.`,
+      data: {
+        sheetName: CONTENT_SHEET_NAME,
+      },
+    };
+  }
 
   const content = _getOrFetchCache(CACHE_KEYS.content, () => {
     return _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
