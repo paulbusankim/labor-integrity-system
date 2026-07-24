@@ -113,12 +113,14 @@ function _saveLogFromUser(payload) {
     .filter((value) => value !== null);
 
   if (selectedOptions.length === 0) {
-    console.warn(
-      `${TAG} 제출 체크박스 검사 실패: 제출한 체크박스가 모두 false입니다.`,
-      { selectedOptions },
-    );
-
-    return;
+    return {
+      status: false,
+      message: `모든 체크박스 값이 FALSE입니다.`,
+      data: {
+        valueCheckboxes: JSON.stringify(valueCheckboxes),
+        selectedOptions,
+      },
+    };
   }
 
   try {
