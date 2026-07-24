@@ -217,7 +217,12 @@ function handleUserSubmit(e) {
     _showToast("데이터를 저장했습니다.", "SUCCESS");
     reset();
   } catch (error) {
-    log("ERROR", tag, `데이터 저장 실패`, { error });
+    log("ERROR", tag, `데이터 저장 실패`, {
+      message: error.message,
+      stack: error.stack,
+    });
+    _showToast("치명적 오류 발생", "ERROR");
+    reset();
   } finally {
     lock.releaseLock();
   }
