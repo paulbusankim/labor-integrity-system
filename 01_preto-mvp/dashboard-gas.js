@@ -196,23 +196,26 @@ function handleUserSubmit(e) {
 
     const { status, message, data } =
       lib_labor_master_db.saveCheckboxStatus(payload);
+
+    const reset = () => {
+      SpreadsheetApp.flush();
+      Utilities.sleep(1000);
+      _resetCheckboxes(rangeCheckboxes);
+      _resetSubmission(range);
+      const cacheContent = _getOrFetchCache(CACHE_KEYS.CONTENT, () => {
+        return lib_labor_master_db.getContent();
+      });
+      _resetContent(sheet, cacheContent);
+    };
+
     if (status === false) {
       log("WARN", tag, `${message}`, { data });
       _showToast("데이터를 저장하는 중 오류가 발생했습니다.", "ERROR");
-      SpreadsheetApp.flush();
-      Utilities.sleep(1000);
+      reset();
       return;
     }
     _showToast("데이터를 저장했습니다.", "SUCCESS");
-    SpreadsheetApp.flush();
-    Utilities.sleep(1000);
-    _resetCheckboxes(rangeCheckboxes);
-    _resetSubmission(range);
-
-    const cacheContent = _getOrFetchCache(CACHE_KEYS.CONTENT, () => {
-      return lib_labor_master_db.getContent();
-    });
-    _resetContent(sheet, cacheContent);
+    reset();
   } catch (error) {
     log("ERROR", tag, `데이터 저장 실패`, { error });
   } finally {
