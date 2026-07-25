@@ -6,7 +6,7 @@ const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
 const SHEET_NAMES = {
-  CHECKBOX_CONFIG: "Checkbox_Config",
+  CHECKBOX_CONFIG: "Config_Checkbox",
 };
 const CACHE_KEYS = {
   CONFIG: "config-cache",
