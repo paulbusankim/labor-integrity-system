@@ -5,9 +5,13 @@ const MASTER_DB_SHEET_URL =
 const LOG_SHEET_NAME = "Log";
 const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
+const SHEET_NAMES = {
+  CHECKBOX_CONFIG: "Checkbox_Config",
+};
 const CACHE_KEYS = {
-  config: "config-cache",
-  content: "content-cache",
+  CONFIG: "config-cache",
+  CONTENT: "content-cache",
+  CHECKBOX_CONFIG: "checkbox-config-cache",
 };
 // 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
 const CACHE_TTL = 21600;
@@ -116,7 +120,7 @@ function _saveLogFromUser(payload) {
     };
   }
 
-  const content = _getOrFetchCache(CACHE_KEYS.content, () => {
+  const content = _getOrFetchCache(CACHE_KEYS.CONTENT, () => {
     return _mapSheet(MASTER_FILE, CONTENT_SHEET_NAME);
   });
   if (!content) {
@@ -169,15 +173,36 @@ const _exportSheetValues = (sheetName, cacheKey) => {
   });
 };
 
+const _exportSheetTable = (sheetName, cacheKey) => {
+  if (!MASTER_FILE) MASTER_FILE = SpreadsheetApp.openByUrl(MASTER_DB_SHEET_URL);
+
+  return _getOrFetchCache(cacheKey, () => {
+    const sheet = MASTER_FILE.getSheetByName(sheetName);
+    const lastRow = sheet.getLastRow();
+    const lastCol = sheet.getLastColumn();
+    if (lastRow === 0 || lastCol === 0) return [];
+
+    const range = sheet.getRange(1, 1, lastRow, lastCol);
+    const values = range.getValues();
+    return values;
+  });
+};
+
 const MasterDB = {
   saveCheckboxStatus: _saveLogFromUser,
   getConfig: () => {
-    return _exportSheetValues(CONFIG_SHEET_NAME, CACHE_KEYS.config);
+    return _exportSheetValues(CONFIG_SHEET_NAME, CACHE_KEYS.CONFIG);
   },
   getContent: () => {
-    return _exportSheetValues(CONTENT_SHEET_NAME, CACHE_KEYS.content);
+    return _exportSheetValues(CONTENT_SHEET_NAME, CACHE_KEYS.CONTENT);
   },
+  getCheckboxConfig: () =>
+    _exportSheetTable(SHEET_NAMES.CHECKBOX_CONFIG, CACHE_KEYS.CHECKBOX_CONFIG),
 };
+
+function getCheckboxConfig() {
+  return MasterDB.getCheckboxConfig();
+}
 
 function getConfig() {
   return MasterDB.getConfig();
