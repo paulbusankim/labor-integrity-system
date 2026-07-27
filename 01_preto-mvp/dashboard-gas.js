@@ -1,7 +1,7 @@
 const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
-  APP_INIT_STATUS: "Dashboard:app-init-status",
+  APP_STATUS: "Dashboard:app-status",
 };
 
 // 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
@@ -154,11 +154,11 @@ function handleOnOpen() {
   });
 
   if (cacheConfig && cacheContent) {
-    _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: true });
+    _putCache(CACHE_KEYS.APP_STATUS, { cacheStatus: true });
     _showToast("앱 준비완료!", "INFO");
     _log("INFO", tag, "앱 오픈 및 캐시 초기화 완료");
   } else {
-    _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: false });
+    _putCache(CACHE_KEYS.APP_STATUS, { cacheStatus: false });
     _log("WARN", tag, "앱 오픈 및 캐시 초기화 실패", {
       cacheConfig: JSON.stringify(cacheConfig),
       cacheContent: JSON.stringify(cacheContent),
