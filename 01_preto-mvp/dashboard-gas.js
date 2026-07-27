@@ -143,7 +143,8 @@ const _showToast = (msg, level = "INFO", title = null) => {
   ss.toast(`${current.icon} ${msg}`, finalTitle, 5); // 표시 시간(초) 설정 가능
 };
 
-function onOpen() {
+function handleOnOpen() {
+  const tag = "Dashboard:handleOnOpen";
   const cacheConfig = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
     return lib_labor_master_db.getConfig();
   });
@@ -155,8 +156,13 @@ function onOpen() {
   if (cacheConfig && cacheContent) {
     _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: true });
     _showToast("앱 준비완료!", "INFO");
+    _log("INFO", tag, "앱 오픈 및 캐시 초기화 완료");
   } else {
     _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: false });
+    _log("WARN", tag, "앱 오픈 및 캐시 초기화 실패", {
+      cacheConfig: JSON.stringify(cacheConfig),
+      cacheContent: JSON.stringify(cacheContent),
+    });
   }
 }
 
