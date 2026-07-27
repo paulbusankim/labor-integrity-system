@@ -155,7 +155,6 @@ function handleOnOpen() {
 
   if (cacheConfig && cacheContent) {
     _putCache(CACHE_KEYS.APP_STATUS, { cacheStatus: true });
-    _showToast("앱 준비완료!", "INFO");
     _log("INFO", tag, "앱 오픈 및 캐시 초기화 완료");
   } else {
     _putCache(CACHE_KEYS.APP_STATUS, { cacheStatus: false });
