@@ -18,7 +18,9 @@ const log = (level, tag, message, data = null) => {
 const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
+  APP_INIT_STATUS: "Dashboard:app-init-status",
 };
+
 // 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
 const CACHE_TTL = 21600;
 
@@ -140,6 +142,23 @@ const _showToast = (msg, level = "INFO", title = null) => {
   // 이모지를 포함한 포맷팅된 메시지 출력
   ss.toast(`${current.icon} ${msg}`, finalTitle, 5); // 표시 시간(초) 설정 가능
 };
+
+function onOpen() {
+  const cacheConfig = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
+    return lib_labor_master_db.getConfig();
+  });
+
+  const cacheContent = _getOrFetchCache(CACHE_KEYS.CONTENT, () => {
+    return lib_labor_master_db.getContent();
+  });
+
+  if (cacheConfig && cacheContent) {
+    _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: true });
+    _showToast("앱 준비완료!", "INFO");
+  } else {
+    _putCache(CACHE_KEYS.APP_INIT_STATUS, { cacheStatus: false });
+  }
+}
 
 /**
  * [트리거 설정 필수 안내]
