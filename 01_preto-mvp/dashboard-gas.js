@@ -196,6 +196,16 @@ function handleUserSubmit(e) {
     var address = range.getA1Notation();
     var value = e.value;
 
+    const appStatus = _getCache(CACHE_KEYS.APP_STATUS);
+    if (appStatus === null) {
+      _log("INFO", tag, "초기화 완료되지 않았음", appStatus);
+      return;
+    }
+    if (appStatus.cacheStatus === false) {
+      _log("INFO", tag, "캐시 초기화가 되지 않았음", appStatus);
+      return;
+    }
+
     const cacheConfig = _getOrFetchCache(CACHE_KEYS.CONFIG, () => {
       return lib_labor_master_db.getConfig();
     });
@@ -270,7 +280,9 @@ function adminClearCache() {
       });
     });
   } catch (error) {
-    _log("ERROR", tag, "관리자 권한으로 캐시 강제 삭제 중 오류 발생", { error });
+    _log("ERROR", tag, "관리자 권한으로 캐시 강제 삭제 중 오류 발생", {
+      error,
+    });
     throw error;
   }
 }
