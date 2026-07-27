@@ -7,11 +7,13 @@ const CONFIG_SHEET_NAME = "Config";
 const CONTENT_SHEET_NAME = "Content";
 const SHEET_NAMES = {
   CHECKBOX_CONFIG: "Config_Checkbox",
+  CONFIG_INPUTBOX: "Config_Inputbox",
 };
 const CACHE_KEYS = {
   CONFIG: "config-cache",
   CONTENT: "content-cache",
   CHECKBOX_CONFIG: "checkbox-config-cache",
+  CONFIG_INPUTBOX: "cache-config-inputbox",
 };
 // 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
 const CACHE_TTL = 21600;
@@ -198,20 +200,22 @@ const MasterDB = {
   },
   getCheckboxConfig: () =>
     _exportSheetTable(SHEET_NAMES.CHECKBOX_CONFIG, CACHE_KEYS.CHECKBOX_CONFIG),
+  getConfigInputbox: () =>
+    _exportSheetTable(SHEET_NAMES.CONFIG_INPUTBOX, CACHE_KEYS.CONFIG_INPUTBOX),
 };
 
 function getCheckboxConfig() {
   return MasterDB.getCheckboxConfig();
 }
-
+function getConfigInputbox() {
+  return MasterDB.getConfigInputbox();
+}
 function getConfig() {
   return MasterDB.getConfig();
 }
-
 function getContent() {
   return MasterDB.getContent();
 }
-
 function saveCheckboxStatus(payload) {
   return MasterDB.saveCheckboxStatus(payload);
 }
