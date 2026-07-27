@@ -1,6 +1,7 @@
 const CACHE_KEYS = {
   CONFIG: "Dashboard:config",
   CONTENT: "Dashboard:content",
+  CONFIG_INPUTBOX: "Dashboard:config-inputbox",
   APP_STATUS: "Dashboard:app-status",
 };
 
@@ -153,7 +154,14 @@ function handleOnOpen() {
     return lib_labor_master_db.getContent();
   });
 
-  if (cacheConfig && cacheContent) {
+  const cacheConfigInputbox = _getOrFetchCache(
+    CACHE_KEYS.CONFIG_INPUTBOX,
+    () => {
+      return lib_labor_master_db.getConfigInputbox();
+    },
+  );
+
+  if (cacheConfig && cacheContent && cacheConfigInputbox) {
     _putCache(CACHE_KEYS.APP_STATUS, { cacheStatus: true });
     _log("INFO", tag, "앱 오픈 및 캐시 초기화 완료");
   } else {
@@ -161,6 +169,7 @@ function handleOnOpen() {
     _log("WARN", tag, "앱 오픈 및 캐시 초기화 실패", {
       cacheConfig: JSON.stringify(cacheConfig),
       cacheContent: JSON.stringify(cacheContent),
+      cacheConfigInputbox: JSON.stringify(cacheConfigInputbox),
     });
   }
 }
