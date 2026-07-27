@@ -1,4 +1,13 @@
-const log = (level, tag, message, data = null) => {
+const CACHE_KEYS = {
+  CONFIG: "Dashboard:config",
+  CONTENT: "Dashboard:content",
+  APP_INIT_STATUS: "Dashboard:app-init-status",
+};
+
+// 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
+const CACHE_TTL = 21600;
+
+const _log = (level, tag, message, data = null) => {
   const formats = {
     INFO: { icon: "ℹ️", method: console.info },
     WARN: { icon: "⚠️", method: console.warn },
@@ -15,21 +24,12 @@ const log = (level, tag, message, data = null) => {
   );
 };
 
-const CACHE_KEYS = {
-  CONFIG: "Dashboard:config",
-  CONTENT: "Dashboard:content",
-  APP_INIT_STATUS: "Dashboard:app-init-status",
-};
-
-// 캐시 만료 시간 상수화 (예: 6시간 = 21600초)
-const CACHE_TTL = 21600;
-
 const _putCache = (name, value) => {
   const tag = "Dashboard:_putCache";
   const cacheService = CacheService.getScriptCache();
 
   cacheService.put(name, JSON.stringify(value), CACHE_TTL);
-  log("INFO", tag, `${name} 캐시 저장`, { name, value });
+  _log("INFO", tag, `${name} 캐시 저장`, { name, value });
 };
 
 const _getCache = (name) => {
@@ -39,7 +39,7 @@ const _getCache = (name) => {
   const cache = cacheService.get(name);
 
   if (!cache) return null;
-  log("INFO", tag, `${name} 캐시 로드`, { name });
+  _log("INFO", tag, `${name} 캐시 로드`, { name });
   return JSON.parse(cache);
 };
 
@@ -103,7 +103,7 @@ const _resetContent = (sheet, cacheContent) => {
   let successCount = 0;
   let failCount = 0;
 
-  log("INFO", tag, `총 ${totalCount}개의 셀 콘텐츠 리셋 시작`, { totalCount });
+  _log("INFO", tag, `총 ${totalCount}개의 셀 콘텐츠 리셋 시작`, { totalCount });
 
   entries.forEach(([address, value]) => {
     if (!value) return;
@@ -113,11 +113,11 @@ const _resetContent = (sheet, cacheContent) => {
       successCount++;
     } catch (error) {
       failCount++;
-      log("ERROR", tag, `${address}값 "${value}"로 리셋실패`, { error });
+      _log("ERROR", tag, `${address}값 "${value}"로 리셋실패`, { error });
     }
   });
 
-  log(
+  _log(
     "INFO",
     tag,
     `콘텐츠 리셋 작업 완료 | 성공: ${successCount}개, 실패: ${failCount}개`,
@@ -181,7 +181,7 @@ function handleUserSubmit(e) {
   try {
     lock.waitLock(10000);
   } catch (error) {
-    log("WARN", tag, `이전 작업이 진행 중. 잠금 획득 실패.`);
+    _log("WARN", tag, `이전 작업이 진행 중. 잠금 획득 실패.`);
   }
 
   try {
@@ -228,7 +228,7 @@ function handleUserSubmit(e) {
     };
 
     if (status === false) {
-      log("WARN", tag, `${message}`, { data });
+      _log("WARN", tag, `${message}`, { data });
       _showToast("데이터를 저장하는 중 오류가 발생했습니다.", "ERROR");
       reset();
       return;
@@ -236,7 +236,7 @@ function handleUserSubmit(e) {
     _showToast("데이터를 저장했습니다.", "SUCCESS");
     reset();
   } catch (error) {
-    log("ERROR", tag, `데이터 저장 실패`, {
+    _log("ERROR", tag, `데이터 저장 실패`, {
       message: error.message,
       stack: error.stack,
     });
@@ -259,12 +259,12 @@ function adminClearCache() {
 
     Object.values(CACHE_KEYS).forEach((cacheKey) => {
       cacheService.remove(cacheKey);
-      log("WARN", tag, `관리자 권한으로 ${cacheKey} 캐시 강제 삭제`, {
+      _log("WARN", tag, `관리자 권한으로 ${cacheKey} 캐시 강제 삭제`, {
         cacheKey,
       });
     });
   } catch (error) {
-    log("ERROR", tag, "관리자 권한으로 캐시 강제 삭제 중 오류 발생", { error });
+    _log("ERROR", tag, "관리자 권한으로 캐시 강제 삭제 중 오류 발생", { error });
     throw error;
   }
 }
