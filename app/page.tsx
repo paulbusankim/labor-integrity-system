@@ -8,23 +8,33 @@ import { logger } from "@/utils/logger";
 import { sendToGoogleSheet } from "@/utils/sheetLogger";
 
 export default function Home() {
+  // 상태 변경: hours 대신 dailyHours와 workingDays로 분리
   const [wage, setWage] = useState<number | "">("");
-  const [hours, setHours] = useState<number | "">("");
+  const [dailyHours, setDailyHours] = useState<number | "">("");
+  const [workingDays, setWorkingDays] = useState<number | "">("");
   const [result, setResult] = useState<CalculationResult | null>(null);
 
   const calculateAllowance = () => {
-    // 💡 계산 시작 시점 로깅 (디버그 모드에서는 입력값까지 상세히 출력)
     logger.info("Calculate", "주휴수당 계산 요청 발생");
-    logger.debug("InputData", "현재 입력된 상태값", { wage, hours });
+    logger.debug("InputData", "현재 입력된 상태값", {
+      wage,
+      dailyHours,
+      workingDays,
+    });
 
     const numWage = Number(wage);
-    const numHours = Number(hours);
+    const numDailyHours = Number(dailyHours);
+    const numWorkingDays = Number(workingDays);
 
-    if (!numWage || !numHours) {
+    // 유효성 검사 강화
+    if (!numWage || !numDailyHours || !numWorkingDays) {
       logger.warn("Validation", "입력값 누락으로 계산 중단됨");
-      alert("시급과 일한 시간을 정확히 입력해 주세요.");
+      alert("시급, 1일 근무시간, 근무일수를 모두 정확히 입력해 주세요.");
       return;
     }
+
+    // 💡 총 근무시간 계산 (하루 근무시간 * 근무일수)
+    const numHours = numDailyHours * numWorkingDays;
 
     // 조건 1: 15시간 미만 (특이 케이스 Info 로그)
     if (numHours < 15) {
@@ -51,7 +61,7 @@ export default function Home() {
     setResult(finalResult);
     logger.info("Result", "주휴수당 계산 성공", finalResult);
 
-    // 🚀 계산 성공 시 구글 시트로 비동기 데이터 전송 (Sentry 캡처하듯 가볍게 호출)
+    // 🚀 구글 시트 전송 (기존 구조 유지를 위해 계산된 총 시간인 numHours를 hours에 전달)
     sendToGoogleSheet({
       wage: numWage,
       hours: numHours,
@@ -71,11 +81,14 @@ export default function Home() {
         <CalculatorForm
           wage={wage}
           setWage={setWage}
-          hours={hours}
-          setHours={setHours}
+          dailyHours={dailyHours}
+          setDailyHours={setDailyHours}
+          workingDays={workingDays}
+          setWorkingDays={setWorkingDays}
           onCalculate={calculateAllowance}
         />
 
+        {/* 결과 컴포넌트는 변경 없이 그대로 사용 */}
         <ResultDisplay result={result} />
       </div>
     </main>

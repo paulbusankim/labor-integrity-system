@@ -3,16 +3,20 @@ import { Dispatch, SetStateAction } from "react";
 interface CalculatorFormProps {
   wage: number | "";
   setWage: Dispatch<SetStateAction<number | "">>;
-  hours: number | "";
-  setHours: Dispatch<SetStateAction<number | "">>;
+  dailyHours: number | "";
+  setDailyHours: Dispatch<SetStateAction<number | "">>;
+  workingDays: number | "";
+  setWorkingDays: Dispatch<SetStateAction<number | "">>;
   onCalculate: () => void;
 }
 
 export default function CalculatorForm({
   wage,
   setWage,
-  hours,
-  setHours,
+  dailyHours,
+  setDailyHours,
+  workingDays,
+  setWorkingDays,
   onCalculate,
 }: CalculatorFormProps) {
   return (
@@ -28,23 +32,39 @@ export default function CalculatorForm({
           onChange={(e) =>
             setWage(e.target.value === "" ? "" : Number(e.target.value))
           }
-          placeholder="예: 9860"
+          placeholder="예: 11500"
           className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
       </div>
 
-      {/* 근무시간 입력 */}
+      {/* 1일 근무시간 입력 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          1주일 총 근무시간 (시간)
+          1일 근무시간 (시간)
         </label>
         <input
           type="number"
-          value={hours}
+          value={dailyHours}
           onChange={(e) =>
-            setHours(e.target.value === "" ? "" : Number(e.target.value))
+            setDailyHours(e.target.value === "" ? "" : Number(e.target.value))
           }
-          placeholder="예: 20"
+          placeholder="예: 8"
+          className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
+        />
+      </div>
+
+      {/* 1주 근무일수 입력 */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          1주 근무일수 (일)
+        </label>
+        <input
+          type="number"
+          value={workingDays}
+          onChange={(e) =>
+            setWorkingDays(e.target.value === "" ? "" : Number(e.target.value))
+          }
+          placeholder="예: 5"
           className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
       </div>
