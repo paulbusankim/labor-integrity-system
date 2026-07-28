@@ -9,7 +9,9 @@ export const CONFIG = {
   },
   API: {
     // 💡 내일 GAS 웹 앱으로 배포한 뒤 나오는 URL을 여기에 넣을 예정입니다.
-    GOOGLE_SHEET_URL: process.env.NEXT_PUBLIC_GAS_URL || "",
+    GOOGLE_SHEET_URL:
+      process.env.NEXT_PUBLIC_GAS_URL ||
+      "https://script.google.com/macros/s/AKfycbxICZdFXzj78FlT-saW3Mw0tufbeG6IWzyMH28ynRh8uAAzDAxyQXSghHC4bUUxNb5DuA/exec",
   },
   IS_DEV: process.env.NODE_ENV === "development",
 };

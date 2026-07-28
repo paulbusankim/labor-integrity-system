@@ -5,6 +5,7 @@ import CalculatorForm from "@/components/CalculatorForm";
 import ResultDisplay from "@/components/ResultDisplay";
 import { CalculationResult } from "@/types/calculator";
 import { logger } from "@/utils/logger";
+import { sendToGoogleSheet } from "@/utils/sheetLogger";
 
 export default function Home() {
   const [wage, setWage] = useState<number | "">("");
@@ -50,13 +51,13 @@ export default function Home() {
     setResult(finalResult);
     logger.info("Result", "주휴수당 계산 성공", finalResult);
 
-    // GAS 연동 코드의 fetch 로직
-    /*
-    if (CONFIG.API.GOOGLE_SHEET_URL) {
-      logger.debug("API", "구글 시트로 데이터 전송 시도", { url: CONFIG.API.GOOGLE_SHEET_URL });
-      // fetch(CONFIG.API.GOOGLE_SHEET_URL, { ... })
-    }
-    */
+    // 🚀 계산 성공 시 구글 시트로 비동기 데이터 전송 (Sentry 캡처하듯 가볍게 호출)
+    sendToGoogleSheet({
+      wage: numWage,
+      hours: numHours,
+      amount: finalResult.amount,
+      message: finalResult.message,
+    });
   };
 
   // 3. UI 조립
