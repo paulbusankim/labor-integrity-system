@@ -1,65 +1,82 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import CalculatorForm from "@/components/CalculatorForm";
+import ResultDisplay from "@/components/ResultDisplay";
+import { CalculationResult } from "@/types/calculator";
+import { logger } from "@/utils/logger";
 
 export default function Home() {
+  const [wage, setWage] = useState<number | "">("");
+  const [hours, setHours] = useState<number | "">("");
+  const [result, setResult] = useState<CalculationResult | null>(null);
+
+  const calculateAllowance = () => {
+    // 💡 계산 시작 시점 로깅 (디버그 모드에서는 입력값까지 상세히 출력)
+    logger.info("Calculate", "주휴수당 계산 요청 발생");
+    logger.debug("InputData", "현재 입력된 상태값", { wage, hours });
+
+    const numWage = Number(wage);
+    const numHours = Number(hours);
+
+    if (!numWage || !numHours) {
+      logger.warn("Validation", "입력값 누락으로 계산 중단됨");
+      alert("시급과 일한 시간을 정확히 입력해 주세요.");
+      return;
+    }
+
+    // 조건 1: 15시간 미만 (특이 케이스 Info 로그)
+    if (numHours < 15) {
+      logger.info("Result", "주 15시간 미만 - 지급 대상 아님");
+      setResult({
+        amount: 0,
+        message:
+          "주 15시간 미만 근무는 근로기준법상 주휴수당 지급 대상이 아닙니다.",
+        isEligible: false,
+      });
+      return;
+    }
+
+    // 조건 2: 정상 계산 로직
+    const validHours = numHours > 40 ? 40 : numHours;
+    const allowance = (validHours / 40) * 8 * numWage;
+
+    const finalResult = {
+      amount: Math.floor(allowance),
+      message: `주 ${numHours}시간 근무 기준, 법적으로 당연히 받아야 할 주휴수당입니다!`,
+      isEligible: true,
+    };
+
+    setResult(finalResult);
+    logger.info("Result", "주휴수당 계산 성공", finalResult);
+
+    // GAS 연동 코드의 fetch 로직
+    /*
+    if (CONFIG.API.GOOGLE_SHEET_URL) {
+      logger.debug("API", "구글 시트로 데이터 전송 시도", { url: CONFIG.API.GOOGLE_SHEET_URL });
+      // fetch(CONFIG.API.GOOGLE_SHEET_URL, { ... })
+    }
+    */
+  };
+
+  // 3. UI 조립
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 font-sans">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          내 주휴수당 3초 확인기 💸
+        </h1>
+
+        <CalculatorForm
+          wage={wage}
+          setWage={setWage}
+          hours={hours}
+          setHours={setHours}
+          onCalculate={calculateAllowance}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        <ResultDisplay result={result} />
+      </div>
+    </main>
   );
 }
