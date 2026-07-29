@@ -68,6 +68,7 @@ export default function Home() {
       amount: Math.floor(allowance),
       message: `주 ${numHours}시간 근무 기준, 법적으로 당연히 받아야 할 주휴수당입니다!`,
       isEligible: true,
+      isTaxDeducted,
     };
 
     setResult(finalResult);
