@@ -6,7 +6,11 @@ import ResultDisplay from "@/components/ResultDisplay";
 import LaborIssueSurvey from "@/components/LaborIssueSurvey";
 import { CalculationResult } from "@/types/calculator";
 import { logger } from "@/utils/logger";
-import { sendToGoogleSheet } from "@/utils/sheetLogger";
+import {
+  sendToGoogleSheet,
+  sendSurveyToGoogleSheet,
+} from "@/utils/sheetLogger";
+import { LaborIssueSurveyData } from "@/types/survey";
 
 export default function Home() {
   // 상태 변경: hours 대신 dailyHours와 workingDays로 분리
@@ -71,7 +75,15 @@ export default function Home() {
     });
   };
 
-  const handleSurveySubmit = () => {};
+  const handleSurveySubmit = (surveyData: LaborIssueSurveyData) => {
+    logger.info("Survey", "노동 이슈 설문 데이터 제출", surveyData);
+
+    sendSurveyToGoogleSheet({
+      wage: Number(wage),
+      hours: Number(dailyHours) * Number(workingDays),
+      ...surveyData,
+    });
+  };
 
   // 3. UI 조립
   return (
