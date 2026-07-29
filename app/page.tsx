@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CalculatorForm from "@/components/CalculatorForm";
 import ResultDisplay from "@/components/ResultDisplay";
+import LaborIssueSurvey from "@/components/LaborIssueSurvey";
 import { CalculationResult } from "@/types/calculator";
 import { logger } from "@/utils/logger";
 import { sendToGoogleSheet } from "@/utils/sheetLogger";
@@ -70,6 +71,8 @@ export default function Home() {
     });
   };
 
+  const handleSurveySubmit = () => {};
+
   // 3. UI 조립
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 font-sans">
@@ -90,6 +93,8 @@ export default function Home() {
 
         {/* 결과 컴포넌트는 변경 없이 그대로 사용 */}
         <ResultDisplay result={result} />
+
+        {result && <LaborIssueSurvey onSubmit={handleSurveySubmit} />}
       </div>
     </main>
   );
