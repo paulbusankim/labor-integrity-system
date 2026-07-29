@@ -18,6 +18,7 @@ export default function Home() {
   const [wage, setWage] = useState<number | "">("");
   const [dailyHours, setDailyHours] = useState<number | "">("");
   const [workingDays, setWorkingDays] = useState<number | "">("");
+  const [isTaxDeducted, setIsTaxDeducted] = useState(false);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [isSurveySubmitted, setIsSurveySubmitted] = useState(false);
 
@@ -57,7 +58,11 @@ export default function Home() {
 
     // 조건 2: 정상 계산 로직
     const validHours = numHours > 40 ? 40 : numHours;
-    const allowance = (validHours / 40) * 8 * numWage;
+    let allowance = (validHours / 40) * 8 * numWage;
+
+    if (isTaxDeducted) {
+      allowance = allowance * 0.967;
+    }
 
     const finalResult = {
       amount: Math.floor(allowance),
@@ -104,6 +109,8 @@ export default function Home() {
           setDailyHours={setDailyHours}
           workingDays={workingDays}
           setWorkingDays={setWorkingDays}
+          isTaxDeducted={isTaxDeducted}
+          setIsTaxDeducted={setIsTaxDeducted}
           onCalculate={calculateAllowance}
         />
 
