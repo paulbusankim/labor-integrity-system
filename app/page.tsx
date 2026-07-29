@@ -4,6 +4,7 @@ import { useState } from "react";
 import CalculatorForm from "@/components/CalculatorForm";
 import ResultDisplay from "@/components/ResultDisplay";
 import LaborIssueSurvey from "@/components/LaborIssueSurvey";
+import SurveyResultChart from "@/components/SurveyResultChart";
 import { CalculationResult } from "@/types/calculator";
 import { logger } from "@/utils/logger";
 import {
@@ -18,6 +19,7 @@ export default function Home() {
   const [dailyHours, setDailyHours] = useState<number | "">("");
   const [workingDays, setWorkingDays] = useState<number | "">("");
   const [result, setResult] = useState<CalculationResult | null>(null);
+  const [isSurveySubmitted, setIsSurveySubmitted] = useState(false);
 
   const calculateAllowance = () => {
     logger.info("Calculate", "주휴수당 계산 요청 발생");
@@ -83,6 +85,8 @@ export default function Home() {
       hours: Number(dailyHours) * Number(workingDays),
       ...surveyData,
     });
+
+    setIsSurveySubmitted(true);
   };
 
   // 3. UI 조립
@@ -107,6 +111,8 @@ export default function Home() {
         <ResultDisplay result={result} />
 
         {result && <LaborIssueSurvey onSubmit={handleSurveySubmit} />}
+
+        {isSurveySubmitted && <SurveyResultChart />}
       </div>
     </main>
   );
