@@ -5,6 +5,7 @@ import CalculatorForm from "@/components/CalculatorForm";
 import ResultDisplay from "@/components/ResultDisplay";
 import LaborIssueSurvey from "@/components/LaborIssueSurvey";
 import SurveyResultChart from "@/components/SurveyResultChart";
+import Disclaimer from "@/components/Disclaimer";
 import { CalculationResult } from "@/types/calculator";
 import { logger } from "@/utils/logger";
 import {
@@ -121,6 +122,8 @@ export default function Home() {
         {result && <LaborIssueSurvey onSubmit={handleSurveySubmit} />}
 
         {isSurveySubmitted && <SurveyResultChart />}
+
+        <Disclaimer />
       </div>
     </main>
   );
