@@ -5,14 +5,8 @@
 
 import { CONFIG } from "@/config";
 import { logger } from "@/utils/logger";
+import { SheetLogPayload } from "@/types/sheetLog";
 import { SurveyLogPayload } from "@/types/survey";
-
-interface SheetLogPayload {
-  wage: number | "";
-  hours: number | "";
-  amount: number;
-  message: string;
-}
 
 export const sendToGoogleSheet = async (payload: SheetLogPayload) => {
   const url = CONFIG.API.GOOGLE_SHEET_URL;
