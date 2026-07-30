@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CalculatorForm from "@/components/CalculatorForm";
 import ResultDisplay from "@/components/ResultDisplay";
 import LaborIssueSurvey from "@/components/LaborIssueSurvey";
@@ -23,6 +23,23 @@ export default function Home() {
   const [isTaxDeducted, setIsTaxDeducted] = useState(false);
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [isSurveySubmitted, setIsSurveySubmitted] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("set-tester") === "true") {
+      localStorage.setItem("isMyTesterDevice", "true");
+      alert("이 브라우저는 이제 '테스터 기기'로 영구 설정되었습니다!");
+    }
+  }, []);
+
+  const getUserType = () => {
+    if (typeof window === "undefined") return "👤 일반 유저";
+    const isSavedTester = localStorage.getItem("isMyTesterDevice") === "true";
+    const isUrlTester =
+      new URLSearchParams(window.location.search).get("tester") === "true";
+
+    return isSavedTester || isUrlTester ? "🧪 본인(테스트)" : "👤 일반 유저";
+  };
 
   const calculateAllowance = () => {
     logger.info("Calculate", "주휴수당 계산 요청 발생");
@@ -92,6 +109,7 @@ export default function Home() {
       hours: numHours,
       amount: finalResult.amount,
       message: finalResult.message,
+      userType: getUserType(),
     });
   };
 
@@ -101,6 +119,7 @@ export default function Home() {
     sendSurveyToGoogleSheet({
       wage: Number(wage),
       hours: Number(dailyHours) * Number(workingDays),
+      userType: getUserType(),
       ...surveyData,
     });
 
