@@ -130,7 +130,7 @@ export default function Home() {
         {/* 결과 컴포넌트는 변경 없이 그대로 사용 */}
         <ResultDisplay result={result} />
 
-        {result && <LaborIssueSurvey onSubmit={handleSurveySubmit} />}
+        <LaborIssueSurvey onSubmit={handleSurveySubmit} />
 
         {isSurveySubmitted && <SurveyResultChart />}
 
