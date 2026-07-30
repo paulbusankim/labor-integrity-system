@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { MIN_WAGE } from "@/constants/labor";
 
 interface CalculatorFormProps {
   wage: number | "";
@@ -23,6 +24,27 @@ export default function CalculatorForm({
   setIsTaxDeducted,
   onCalculate,
 }: CalculatorFormProps) {
+  const [wageError, setWageError] = useState(false);
+
+  const handleWageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (value === "") {
+      setWage("");
+      setWageError(false);
+      return;
+    }
+
+    const numValue = Number(value);
+    setWage(numValue);
+
+    if (numValue < MIN_WAGE) {
+      setWageError(true);
+    } else {
+      setWageError(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* 시급 입력 */}
@@ -33,12 +55,19 @@ export default function CalculatorForm({
         <input
           type="number"
           value={wage}
-          onChange={(e) =>
-            setWage(e.target.value === "" ? "" : Number(e.target.value))
-          }
+          onChange={handleWageChange}
           placeholder="예: 11500"
-          className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
+          className={`w-full border rounded-lg p-3 text-lg outline-none transition ${
+            wageError
+              ? "border-red-500 focus:ring-2 focus:ring-red-500 bg-red-50"
+              : "border-gray-300 focus:ring-2 focus:ring-blue-500"
+          }`}
         />
+        {wageError && (
+          <p className="text-xs text-red-500 mt-1.5 font-medium animate-shake">
+            ⚠️ 2026년 최저시급(10,320원)보다 낮은 금액은 입력할 수 없습니다.
+          </p>
+        )}
       </div>
 
       {/* 1일 근무시간 입력 */}
