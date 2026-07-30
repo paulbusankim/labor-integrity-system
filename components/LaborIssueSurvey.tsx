@@ -107,6 +107,15 @@ export default function LaborIssueSurvey({ onSubmit }: LaborIssueSurveyProps) {
                       {copiedKey === key ? "복사 완료!" : "복사하기"}
                     </button>
                   </div>
+                  {/* 💡 고용노동부 민원 접수 바로가기 외부 링크 버튼 */}
+                  <a
+                    href="https://www.moel.go.kr/minwon/apply/formApplyList.do"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 w-full bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 text-xs font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    고용노동부 민원 접수 바로가기 ↗
+                  </a>
                 </div>
               );
             })}
