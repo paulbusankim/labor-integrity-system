@@ -28,6 +28,13 @@ export default function ResultDisplay({ result }: ResultDisplayProps) {
             {result.amount.toLocaleString()}{" "}
             <span className="text-xl font-bold">원</span>
           </div>
+
+          {(result as any).isMaxHoursExceeded && (
+            <p className="text-xs text-blue-600 mt-3 font-medium">
+              ※ 주휴수당은 법정 최대 기준인 40시간으로 적용되어 계산되었습니다.
+            </p>
+          )}
+
           {(result as any).isTaxDeducted && (
             <p className="text-xs text-blue-600 mt-2 font-medium">
               ※ 3.3% 사업소득세가 공제된 예상 실수령액입니다.

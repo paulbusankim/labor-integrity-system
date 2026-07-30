@@ -67,7 +67,8 @@ export default function Home() {
     }
 
     // 조건 2: 정상 계산 로직
-    const validHours = numHours > 40 ? 40 : numHours;
+    const isMaxHoursExceeded = numHours > 40; // 💡 40시간 초과 여부 판단
+    const validHours = isMaxHoursExceeded ? 40 : numHours;
     let allowance = (validHours / 40) * 8 * numWage;
 
     if (isTaxDeducted) {
@@ -79,6 +80,7 @@ export default function Home() {
       message: `주 ${numHours}시간 근무 기준, 법적으로 당연히 받아야 할 주휴수당입니다!`,
       isEligible: true,
       isTaxDeducted,
+      isMaxHoursExceeded,
     };
 
     setResult(finalResult);
