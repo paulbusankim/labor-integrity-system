@@ -13,6 +13,7 @@ import {
   sendSurveyToGoogleSheet,
 } from "@/utils/sheetLogger";
 import { LaborIssueSurveyData } from "@/types/survey";
+import { MIN_WAGE } from "@/constants/labor";
 
 export default function Home() {
   // 상태 변경: hours 대신 dailyHours와 workingDays로 분리
@@ -39,6 +40,14 @@ export default function Home() {
     if (!numWage || !numDailyHours || !numWorkingDays) {
       logger.warn("Validation", "입력값 누락으로 계산 중단됨");
       alert("시급, 1일 근무시간, 근무일수를 모두 정확히 입력해 주세요.");
+      return;
+    }
+
+    if (numWage < MIN_WAGE) {
+      logger.warn("Validation", "최저시급 미만 금액 입력으로 계산 중단됨");
+      alert(
+        "2026년 최저시급(10,320원)보다 낮은 금액으로는 계산할 수 없습니다.",
+      );
       return;
     }
 
