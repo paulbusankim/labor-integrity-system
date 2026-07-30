@@ -1,6 +1,6 @@
 export interface LaborIssueSurveyData {
   splitShift: boolean; // 쪼개기 근무
-  noPayStub: boolean;  // 명세서 미발급 / 임금 체불
+  noPayStub: boolean; // 명세서 미발급 / 임금 체불
   unpaidRest: boolean; // 휴게시간 미보장 / 수당 미지급
 }
 
@@ -8,4 +8,5 @@ export interface LaborIssueSurveyData {
 export interface SurveyLogPayload extends LaborIssueSurveyData {
   wage: number;
   hours: number;
+  userType?: string;
 }
