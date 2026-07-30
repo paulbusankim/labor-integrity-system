@@ -28,7 +28,7 @@ export default function CalculatorForm({
       {/* 시급 입력 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          기본 시급 (원)
+          시급 - 2026년 최저시급 10,320원
         </label>
         <input
           type="number"
