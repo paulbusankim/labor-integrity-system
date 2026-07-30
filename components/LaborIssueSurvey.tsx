@@ -118,11 +118,12 @@ export default function LaborIssueSurvey({ onSubmit }: LaborIssueSurveyProps) {
 
   return (
     <div className="mt-6 p-5 border border-gray-200 bg-white rounded-xl shadow-sm">
-      <h3 className="text-[15px] font-bold text-gray-800 mb-2">
-        혹시 이런 부당한 경험이 있으신가요? (선택)
+      <h3 className="text-sm font-bold text-gray-800 mb-2 leading-snug">
+        아래의 부당한 경험이 있다면 법적 조항 및 대응 문구를 생성해 드려요.
       </h3>
-      <p className="text-xs text-gray-500 mb-4">
-        알바생들의 현실을 파악하기 위한 익명 통계로만 사용됩니다.
+      <p className="text-sm text-gray-600 mb-4">
+        체크하신 항목에 맞춰 <strong>사장님께 바로 보낼 수 있는 메시지</strong>
+        를 제공합니다.
       </p>
 
       <div className="space-y-3">
@@ -170,7 +171,7 @@ export default function LaborIssueSurvey({ onSubmit }: LaborIssueSurveyProps) {
         onClick={handleSubmit}
         className="w-full mt-5 bg-gray-800 hover:bg-gray-900 text-white font-medium py-3 rounded-lg text-sm transition-colors"
       >
-        경험 공유하기
+        법적 근거 및 맞춤형 대응 문구 생성
       </button>
     </div>
   );
