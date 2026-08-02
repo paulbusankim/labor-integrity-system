@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "알바비 3초 체커",
+  title: "알바비 3초 확인기",
   description: "알바비와 주휴수당 계산 및 노동 권익 확인 서비스",
 };
 
