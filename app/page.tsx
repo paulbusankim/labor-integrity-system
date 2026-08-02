@@ -133,9 +133,12 @@ export default function Home() {
 
         <ResultDisplay result={result} />
 
-        <LaborIssueSurvey onSubmit={handleSurveySubmit} />
-
-        {isSurveySubmitted && <SurveyResultChart />}
+        {result && (
+          <>
+            <LaborIssueSurvey onSubmit={handleSurveySubmit} />
+            {isSurveySubmitted && <SurveyResultChart />}
+          </>
+        )}
 
         <Disclaimer />
       </div>
