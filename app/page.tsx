@@ -84,6 +84,7 @@ export default function Home() {
 
     const finalResult = {
       amount: Math.floor(totalPay),
+      allowanceAmount: Math.floor(allowance),
       message: resultMessage,
       isEligible: true,
       isTaxDeducted,

@@ -28,6 +28,12 @@ export default function ResultDisplay({ result }: ResultDisplayProps) {
             {result.amount.toLocaleString()}{" "}
             <span className="text-xl font-bold">원</span>
           </div>
+          {(result as any).allowanceAmount > 0 && (
+            <p className="text-sm text-blue-700 mt-2 font-bold bg-blue-100/50 inline-block px-3 py-1 rounded-full">
+              (포함된 주휴수당:{" "}
+              {(result as any).allowanceAmount.toLocaleString()}원)
+            </p>
+          )}
 
           {(result as any).isMaxHoursExceeded && (
             <p className="text-xs text-blue-600 mt-3 font-medium">
