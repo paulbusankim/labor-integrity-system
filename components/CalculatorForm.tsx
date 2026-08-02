@@ -4,10 +4,8 @@ import { MIN_WAGE } from "@/constants/labor";
 interface CalculatorFormProps {
   wage: number | "";
   setWage: Dispatch<SetStateAction<number | "">>;
-  dailyHours: number | "";
-  setDailyHours: Dispatch<SetStateAction<number | "">>;
-  workingDays: number | "";
-  setWorkingDays: Dispatch<SetStateAction<number | "">>;
+  weeklyHours: number | "";
+  setWeeklyHours: Dispatch<SetStateAction<number | "">>;
   isTaxDeducted: boolean;
   setIsTaxDeducted: Dispatch<SetStateAction<boolean>>;
   onCalculate: () => void;
@@ -16,10 +14,8 @@ interface CalculatorFormProps {
 export default function CalculatorForm({
   wage,
   setWage,
-  dailyHours,
-  setDailyHours,
-  workingDays,
-  setWorkingDays,
+  weeklyHours,
+  setWeeklyHours,
   isTaxDeducted,
   setIsTaxDeducted,
   onCalculate,
@@ -73,31 +69,15 @@ export default function CalculatorForm({
       {/* 1일 근무시간 입력 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          1일 근무시간 (시간)
+          1주 총 근무시간 (시간)
         </label>
         <input
           type="number"
-          value={dailyHours}
+          value={weeklyHours}
           onChange={(e) =>
-            setDailyHours(e.target.value === "" ? "" : Number(e.target.value))
+            setWeeklyHours(e.target.value === "" ? "" : Number(e.target.value))
           }
-          placeholder="예: 8"
-          className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
-        />
-      </div>
-
-      {/* 1주 근무일수 입력 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          1주 근무일수 (일)
-        </label>
-        <input
-          type="number"
-          value={workingDays}
-          onChange={(e) =>
-            setWorkingDays(e.target.value === "" ? "" : Number(e.target.value))
-          }
-          placeholder="예: 5"
+          placeholder="예: 14 (사장이 스케줄을 줄였다면 줄어든 시간을 입력)"
           className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
       </div>
@@ -123,7 +103,7 @@ export default function CalculatorForm({
         onClick={onCalculate}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg text-lg transition-colors mt-4 shadow-md"
       >
-        주휴수당 계산하기
+        내 총급여 확인하기
       </button>
     </div>
   );
