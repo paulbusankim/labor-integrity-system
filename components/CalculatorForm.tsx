@@ -77,7 +77,7 @@ export default function CalculatorForm({
           onChange={(e) =>
             setWeeklyHours(e.target.value === "" ? "" : Number(e.target.value))
           }
-          placeholder="예: 14 (사장이 스케줄을 줄였다면 줄어든 시간을 입력)"
+          placeholder="예: 15"
           className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
         />
       </div>
