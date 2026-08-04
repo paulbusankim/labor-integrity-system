@@ -4,21 +4,21 @@
  */
 export const SURVEY_STATISTICS = [
   {
-    id: "unpaidRest",
-    label: "무급 휴게시간을 강요받았다",
-    percentage: 45, // 여기에 구글 시트의 응답 비율을 수동 입력
-    color: "bg-red-500", // Tailwind 색상 클래스
+    id: "delayedAllowance",
+    label: "교육(수습) 기간 또는 중도 퇴사 시 미정산 발생",
+    percentage: 82,
+    color: "bg-yellow-500",
   },
   {
     id: "midtermResign",
-    label: "교육생 및 중도 퇴사자라는 이유로 임금을 받지 못했다",
+    label: "서류상 휴게시간이나 실제로는 대기·근무함",
     percentage: 68,
     color: "bg-orange-500",
   },
   {
-    id: "delayedAllowance",
-    label: "주휴수당을 지급받지 못하거나 꼼수로 거부당했다",
-    percentage: 82,
-    color: "bg-yellow-500",
+    id: "unpaidRest",
+    label: "주휴수당 지급 지연 또는 누락 경험",
+    percentage: 45,
+    color: "bg-red-500",
   },
 ];
