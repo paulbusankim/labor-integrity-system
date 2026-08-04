@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "알바비 3초 확인기",
-  description: "알바비와 주휴수당 계산 및 노동 권익 확인 서비스",
+  title: "알바비 계산기",
+  description:
+    "교육만 받고 관두셨거나, 일하다 중간에 그만두셨나요? 근로기준법 제36조에 따른 단기·중도 퇴사자 임금 정산 팩트체크. 1분을 일해도 보장받아야 할 내 알바비 정산 기준을 확인하세요.",
 };
 
 export default function RootLayout({
