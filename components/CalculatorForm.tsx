@@ -52,7 +52,7 @@ export default function CalculatorForm({
           type="number"
           value={wage}
           onChange={handleWageChange}
-          placeholder="예: 11500"
+          placeholder="예: 10320"
           className={`w-full border rounded-lg p-3 text-lg outline-none transition ${
             wageError
               ? "border-red-500 focus:ring-2 focus:ring-red-500 bg-red-50"
