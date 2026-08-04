@@ -11,28 +11,6 @@ interface SurveyItem {
 
 const LEGAL_ADVICE_LIST: SurveyItem[] = [
   {
-    key: "unpaidRest",
-    label: (
-      <>
-        서류상으로만 <strong>휴게시간</strong>으로 처리되고, 실제로는 대기하거나
-        일했어요
-      </>
-    ),
-    title: "휴게시간 및 대기시간 산정 기준 가이드",
-    law: (
-      <>
-        근로기준법 제54조 및 제50조 제3항에 따라, 사용자는 4시간 근로 시 30분
-        이상의 자유로운 휴게시간을 주어야 합니다. 단, 서류상 휴게시간이더라도
-        손님이 오면 언제든 일해야 하는 <strong>'대기 상태'</strong>였다면, 이는
-        휴게시간이 아닌{" "}
-        <strong className="underline decoration-red-400 decoration-2 underline-offset-2">
-          근로시간으로 인정되어 임금 청구의 대상
-        </strong>
-        이 될 수 있습니다.
-      </>
-    ),
-  },
-  {
     key: "midtermResign",
     label: (
       <>
@@ -73,6 +51,28 @@ const LEGAL_ADVICE_LIST: SurveyItem[] = [
           소지
         </strong>
         가 있습니다.
+      </>
+    ),
+  },
+  {
+    key: "unpaidRest",
+    label: (
+      <>
+        서류상으로만 <strong>휴게시간</strong>으로 처리되고, 실제로는 대기하거나
+        일했어요
+      </>
+    ),
+    title: "휴게시간 및 대기시간 산정 기준 가이드",
+    law: (
+      <>
+        근로기준법 제54조 및 제50조 제3항에 따라, 사용자는 4시간 근로 시 30분
+        이상의 자유로운 휴게시간을 주어야 합니다. 단, 서류상 휴게시간이더라도
+        손님이 오면 언제든 일해야 하는 <strong>'대기 상태'</strong>였다면, 이는
+        휴게시간이 아닌{" "}
+        <strong className="underline decoration-red-400 decoration-2 underline-offset-2">
+          근로시간으로 인정되어 임금 청구의 대상
+        </strong>
+        이 될 수 있습니다.
       </>
     ),
   },
