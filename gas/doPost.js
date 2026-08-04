@@ -15,13 +15,15 @@ function doPost(e) {
         sheet = ss.insertSheet("SurveyLogs");
       }
 
+      // 💡 변경된 3대 페인 포인트 키값에 맞추어 컬럼 순서 및 데이터 매핑 수정
       sheet.appendRow([
         timestamp,
         data.wage || 0,
         data.hours || 0,
-        data.splitShift ? "O" : "X",
-        data.noPayStub ? "O" : "X",
-        data.unpaidRest ? "O" : "X",
+        data.midtermResign ? "O" : "X", // 1. 교육생/중도 퇴사자 임금 미지급
+        data.delayedAllowance ? "O" : "X", // 2. 주휴수당 지연 및 꼼수
+        data.unpaidRest ? "O" : "X", // 3. 무급 휴게시간
+
         userType,
       ]);
 
