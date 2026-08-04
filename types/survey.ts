@@ -1,10 +1,12 @@
+// UI 항목에 맞춰 완전히 새로고침된 설문 데이터 타입
 export interface LaborIssueSurveyData {
-  splitShift: boolean; // 쪼개기 근무
-  noPayStub: boolean; // 명세서 미발급 / 임금 체불
-  unpaidRest: boolean; // 휴게시간 미보장 / 수당 미지급
+  unpaidRest: boolean; // 무급 휴게시간 / 대기시간 인정 여부
+  midtermResign: boolean; // 교육생 및 중도 퇴사자 급여 미지급
+  delayedAllowance: boolean; // 주휴수당 지연 및 포괄임금 꼼수
 }
 
 // 설문과 기존 계산 데이터를 함께 시트로 전송할 때 사용할 페이로드 타입
+// (extends를 사용했으므로 위 3개 속성이 자동으로 포함됩니다)
 export interface SurveyLogPayload extends LaborIssueSurveyData {
   wage: number;
   hours: number;
