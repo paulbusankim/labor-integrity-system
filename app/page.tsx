@@ -55,10 +55,10 @@ export default function Home() {
       return;
     }
 
-    const isMaxHoursExceeded = numHours > 40; // 💡 40시간 초과 여부 판단
+    const isMaxHoursExceeded = numHours > 40;
     const validHours = isMaxHoursExceeded ? 40 : numHours;
 
-    let basicPay = numHours * numWage; // 일한 시간만큼의 기본 주급
+    let basicPay = numHours * numWage;
     let allowance = 0;
 
     if (numHours >= 15) {
@@ -116,9 +116,14 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4 font-sans">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 py-8 px-4 font-sans">
+      {/* 💡 상단 캐치프레이즈 크기를 text-sm ~ sm:text-base로 상향 조정 */}
+      <h2 className="text-sm sm:text-base font-semibold text-gray-700 mb-5 text-center tracking-tight break-keep px-4">
+        땀 흘려 번 내 월급, 고용노동부 기준대로 1초만에 확인하기!
+      </h2>
+
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">
           알바비 3초 확인기 💸
         </h1>
 
