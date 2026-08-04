@@ -7,7 +7,7 @@ export const SURVEY_STATISTICS = [
     id: "delayedAllowance",
     label: "교육(수습) 기간 또는 중도 퇴사 시 미정산 발생",
     percentage: 82,
-    color: "bg-yellow-500",
+    color: "bg-red-500",
   },
   {
     id: "midtermResign",
@@ -19,6 +19,6 @@ export const SURVEY_STATISTICS = [
     id: "unpaidRest",
     label: "주휴수당 지급 지연 또는 누락 경험",
     percentage: 45,
-    color: "bg-red-500",
+    color: "bg-yellow-500",
   },
 ];
