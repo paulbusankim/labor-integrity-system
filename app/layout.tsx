@@ -5,6 +5,7 @@ import "./globals.css";
 import { Suspense } from "react";
 import { CSPostHogProvider } from "./providers";
 import PostHogPageView from "@/components/PostHogPageView";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,19 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18370642938"
+        strategy="afterInteractive"
+      />
+      <Script id="google-gtag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'AW-18370642938');
+        `}
+      </Script>
       <CSPostHogProvider>
         <body className="min-h-full flex flex-col">
           <Suspense fallback="{null}">
